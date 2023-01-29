@@ -7,8 +7,8 @@
  */
 
 #include "metric.h"
-#include "Eigen/Eigen"
 
+#include <Eigen/Eigen>
 #include <tuple>
 #include <cmath>
 

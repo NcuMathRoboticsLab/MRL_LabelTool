@@ -20,26 +20,26 @@ include_directories(
   ${THIRD_DIR}/implot
   ${THIRD_DIR}/ImGuiFileDialog
   ${GUITool}/include/
-  ${GUITool}/include/windows_handler
-  ${GUITool}/include/label_handler
-  ${GUITool}/include/simulation_handler
+  ${GUITool}/include/WindowsHandler
+  ${GUITool}/include/LabelHandler
+  ${GUITool}/include/SimulationHandler
 )
 
 add_executable(
   GUITool 
 
-  ${GUITool}/include/windows_handler/Controller.h
-  ${GUITool}/include/windows_handler/Controller.cpp
-  ${GUITool}/include/windows_handler/show_control_window.h
-  ${GUITool}/include/windows_handler/show_control_window.cpp
-  ${GUITool}/include/label_handler/LabelController.h
-  ${GUITool}/include/label_handler/LabelController.cpp
-  ${GUITool}/include/label_handler/show_label_window.h
-  ${GUITool}/include/label_handler/show_label_window.cpp
-  ${GUITool}/include/simulation_handler/SimulationController.h
-  ${GUITool}/include/simulation_handler/SimulationController.cpp
-  ${GUITool}/include/simulation_handler/show_simulation_window.h
-  ${GUITool}/include/simulation_handler/show_simulation_window.cpp
+  ${GUITool}/include/WindowsHandler/Controller.h
+  ${GUITool}/include/WindowsHandler/Controller.cpp
+  ${GUITool}/include/WindowsHandler/show_control_window.h
+  ${GUITool}/include/WindowsHandler/show_control_window.cpp
+  ${GUITool}/include/LabelHandler/LabelController.h
+  ${GUITool}/include/LabelHandler/LabelController.cpp
+  ${GUITool}/include/LabelHandler/show_label_window.h
+  ${GUITool}/include/LabelHandler/show_label_window.cpp
+  ${GUITool}/include/SimulationHandler/SimulationController.h
+  ${GUITool}/include/SimulationHandler/SimulationController.cpp
+  ${GUITool}/include/SimulationHandler/show_simulation_window.h
+  ${GUITool}/include/SimulationHandler/show_simulation_window.cpp
 
   ${PROJECT_HEADER}/file_handler.h
   ${PROJECT_HEADER}/file_handler.cpp
@@ -55,7 +55,7 @@ add_executable(
   ${MODEL_DIR}/logistic/logistic.h
   ${MODEL_DIR}/logistic/logistic.cpp
 
-  $<$<BOOL:${WIN32}>: ${APP_ICON_RESOURCE_WINDOWS}>
+  $<$<BOOL:${WIN32}>:${APP_ICON_RESOURCE_WINDOWS}>
 )
 
 if(OPENGL_FOUND)
@@ -69,7 +69,7 @@ target_link_libraries(
   IMGUI_LIB
   IMPLOT_LIB
   IMFD_LIB
-  $<$<BOOL:${WIN32}>: ${THIRD_DIR}/windows/lib/glfw3.lib>
-  $<$<BOOL:${UNIX}>: glfw>
+  $<$<BOOL:${WIN32}>:${THIRD_DIR}/windows/lib/glfw3.lib>
+  $<$<BOOL:${UNIX}>:glfw>
   ${OPENGL_LIBRARIES}
 )

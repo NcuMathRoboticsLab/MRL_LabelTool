@@ -1,4 +1,4 @@
-/**
+/**#include <Eigen/Eigen>
  * @file normalize.cpp
  * @author Mes (mes900903@gmail.com) (Discord: Mes#0903)
  * @brief This is the implementation of class Normalizer
@@ -10,8 +10,8 @@
  */
 
 #include "normalize.h"
-#include "Eigen/Eigen"
 
+#include <Eigen/Eigen>
 #include <iostream>
 #include <fstream>
 

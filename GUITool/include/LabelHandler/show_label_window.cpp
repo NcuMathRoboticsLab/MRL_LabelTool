@@ -9,7 +9,6 @@
  *
  */
 
-#include "Eigen/Eigen"
 #include "imgui_header.h"
 #include "show_label_window.h"
 #include "LabelController.h"
@@ -20,6 +19,7 @@
 #include "normalize.h"
 #include "file_handler.h"
 
+#include <Eigen/Eigen>
 #include <chrono>
 #include <vector>
 #include <algorithm>

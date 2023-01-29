@@ -23,10 +23,11 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")
   endif()
 else()
+  find_package(Eigen3 REQUIRED)
   set(CMAKE_CXX_FLAGS "-Wall -Wextra")
   set(CMAKE_CXX_FLAGS_DEBUG "-g -O3")
   set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-endif(WIN32)
+endif()
 
 # Project header
 set(PROJECT_HEADER ${PROJECT_SOURCE_DIR}/include)
@@ -39,9 +40,11 @@ include_directories(
   ${MODEL_DIR}
   ${MODEL_DIR}/adaboost
   ${MODEL_DIR}/logistic
-  ${THIRD_DIR}/Eigen
+  $<$<BOOL:${WIN32}>:${THIRD_DIR}/Eigen>
+  $<$<BOOL:${UNIX}>:${EIGEN3_INCLUDE_DIRS}>
   ${THIRD_DIR}/imgui
   ${THIRD_DIR}/implot
+  ${THIRD_DIR}/ImGuiFileDialog
   ${GUITool}/include/
   ${GUITool}/include/windows_handler
   ${GUITool}/include/label_handler
@@ -65,7 +68,7 @@ add_executable(Training
   ${MODEL_DIR}/logistic/logistic.h
   ${MODEL_DIR}/logistic/logistic.cpp
 
-  $<$<BOOL:${WIN32}>: ${APP_ICON_RESOURCE_WINDOWS}>
+  $<$<BOOL:${WIN32}>:${APP_ICON_RESOURCE_WINDOWS}>
 )
 
 target_link_libraries(

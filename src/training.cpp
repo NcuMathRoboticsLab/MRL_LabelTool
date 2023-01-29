@@ -18,7 +18,7 @@
 #include <iostream>
 #include <limits>
 
-int main([[maybe_unused]] int argc, char **argv)
+int main()
 {
   const std::string filepath = FileHandler::get_filepath();
 

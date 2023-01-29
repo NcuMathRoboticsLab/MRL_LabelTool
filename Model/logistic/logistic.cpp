@@ -7,8 +7,8 @@
  */
 
 #include "logistic.h"
-#include "Eigen/Eigen"
 
+#include <Eigen/Eigen>
 #include <vector>
 #include <iostream>
 #include <algorithm>

@@ -8,8 +8,8 @@
 
 #include "make_feature.h"
 #include "metric.h"
-#include "Eigen/Eigen"
 
+#include <Eigen/Eigen>
 #include <vector>
 #include <utility>
 #include <cmath>
@@ -145,8 +145,6 @@ namespace MakeFeatures {
   Eigen::MatrixXd segment_to_feature(const std::vector<Eigen::MatrixXd> &section_seg_vec)
   {
     Eigen::MatrixXd feature_data(section_seg_vec.size(), FEATURE_NUM);
-    bool empty_flag = true;
-
     for (int i{}; i < section_seg_vec.size(); ++i)
       feature_data.row(i) = make_feature(section_seg_vec[i]);
 

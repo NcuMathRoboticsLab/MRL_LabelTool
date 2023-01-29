@@ -35,7 +35,7 @@ void AnimationController::transform_frame()
       exit(1);
     }
 
-    std::ofstream outfile(raw_bin_path__, std::ios::binary, std::ios::trunc);
+    std::ofstream outfile(raw_bin_path__, std::ios::binary | std::ios::trunc);
     if (outfile.fail()) {
       std::cerr << "cant found " << raw_bin_path__ << '\n';
       std::cin.get();

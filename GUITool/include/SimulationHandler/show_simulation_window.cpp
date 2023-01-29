@@ -9,7 +9,6 @@
  *
  */
 
-#include "Eigen/Eigen"
 #include "imgui_header.h"
 #include "show_simulation_window.h"
 #include "SimulationController.h"
@@ -17,10 +16,10 @@
 #include "make_feature.h"
 #include "adaboost.h"
 #include "logistic.h"
-#include "segment.h"
 #include "normalize.h"
 #include "file_handler.h"
 
+#include <Eigen/Eigen>
 #include <chrono>
 #include <thread>
 
