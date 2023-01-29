@@ -9,6 +9,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(WIN32)
+  set(EIGEN3_INCLUDE_DIRS ${THIRD_DIR}/Eigen)
   if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     find_package(OpenGL REQUIRED)
     MESSAGE("==================== USING MSVC TO COMILE ====================")
@@ -36,12 +37,11 @@ set(THIRD_DIR ${PROJECT_SOURCE_DIR}/3rdparty)
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
   ${PROJECT_HEADER}
   ${MODEL_DIR}
   ${MODEL_DIR}/adaboost
   ${MODEL_DIR}/logistic
-  $<$<BOOL:${WIN32}>:${THIRD_DIR}/Eigen>
-  $<$<BOOL:${UNIX}>:${EIGEN3_INCLUDE_DIRS}>
   ${THIRD_DIR}/imgui
   ${THIRD_DIR}/implot
   ${THIRD_DIR}/ImGuiFileDialog
