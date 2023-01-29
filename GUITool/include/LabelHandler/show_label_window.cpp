@@ -19,7 +19,7 @@
 #include "normalize.h"
 #include "file_handler.h"
 
-#include <Eigen/Eigen>
+#include "Eigen/Eigen"
 #include <chrono>
 #include <vector>
 #include <algorithm>

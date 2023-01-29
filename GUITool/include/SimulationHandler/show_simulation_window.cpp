@@ -12,6 +12,7 @@
 #include "imgui_header.h"
 #include "show_simulation_window.h"
 #include "SimulationController.h"
+#include "Eigen/Eigen"
 
 #include "make_feature.h"
 #include "adaboost.h"
@@ -19,7 +20,6 @@
 #include "normalize.h"
 #include "file_handler.h"
 
-#include <Eigen/Eigen>
 #include <chrono>
 #include <thread>
 

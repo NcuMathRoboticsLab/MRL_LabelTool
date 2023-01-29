@@ -12,7 +12,8 @@
 #ifndef CONTROLLER_H__
 #define CONTROLLER_H__
 
-#include <Eigen/Eigen>
+#include "Eigen/Eigen"
+
 #include <chrono>
 #include <string>
 #include <fstream>

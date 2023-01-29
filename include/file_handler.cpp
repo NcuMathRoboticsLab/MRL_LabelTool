@@ -10,8 +10,8 @@
 #include "normalize.h"
 #include "make_feature.h"
 #include "metric.h"
+#include "Eigen/Eigen"
 
-#include <Eigen/Eigen>
 #include <filesystem>
 #include <string>
 #include <fstream>

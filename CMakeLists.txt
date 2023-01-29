@@ -9,7 +9,6 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(WIN32)
-  set(EIGEN3_INCLUDE_DIRS ${THIRD_DIR}/Eigen)
   if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     find_package(OpenGL REQUIRED)
     MESSAGE("==================== USING MSVC TO COMILE ====================")
@@ -24,19 +23,17 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")
   endif()
 else()
-  find_package(Eigen3 REQUIRED)
   set(CMAKE_CXX_FLAGS "-Wall -Wextra")
   set(CMAKE_CXX_FLAGS_DEBUG "-g -O3")
   set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 endif()
-
-# Project header
+  
 set(PROJECT_HEADER ${PROJECT_SOURCE_DIR}/include)
 set(MODEL_DIR ${PROJECT_SOURCE_DIR}/Model)
 set(THIRD_DIR ${PROJECT_SOURCE_DIR}/3rdparty)
+set(EIGEN3_INCLUDE_DIRS ${THIRD_DIR}/Eigen)
 
 include_directories(
-  ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
   ${PROJECT_HEADER}
   ${MODEL_DIR}
@@ -51,7 +48,6 @@ include_directories(
   ${GUITool}/include/simulation_handler
 )
 
- 
 add_executable(Training
   ./src/training.cpp
 
@@ -69,12 +65,6 @@ add_executable(Training
   ${MODEL_DIR}/logistic/logistic.cpp
 
   $<$<BOOL:${WIN32}>:${APP_ICON_RESOURCE_WINDOWS}>
-)
-
-target_link_libraries(
-  Training
-  ${catkin_LIBRARIES}
-  ${Eigen3_LIBRARIES}
 )
 
 add_subdirectory(${THIRD_DIR})

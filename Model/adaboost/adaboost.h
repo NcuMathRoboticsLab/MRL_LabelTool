@@ -10,8 +10,8 @@
  */
 
 #include "normalize.h"
+#include "Eigen/Eigen"
 
-#include <Eigen/Eigen>
 #include <vector>
 #include <cmath>
 #include <iostream>
