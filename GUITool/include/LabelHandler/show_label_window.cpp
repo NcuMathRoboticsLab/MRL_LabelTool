@@ -68,7 +68,7 @@ void ShowLabelInformation()
 
     /*----------Load raw data----------*/
     if (ImGui::Button("Load raw data"))
-      ImGuiFileDialog::Instance()->OpenDialog("LoadLabelRawData", "Choose your raw data", ".*", FileHandler::get_filepath() + "\\");
+      ImGuiFileDialog::Instance()->OpenDialog("LoadLabelRawData", "Choose your raw data", ".*", FileHandler::get_filepath() + "/");
 
     ImGui::SameLine();
     ImGui::Text("path: %s", LC.raw_data_path.c_str());
@@ -92,7 +92,7 @@ void ShowLabelInformation()
 
     /*----------Load feature output data----------*/
     if (ImGui::Button("Load feature output data"))
-      ImGuiFileDialog::Instance()->OpenDialog("LoadLabelFeatureData", "Choose the feature data you wanna write to", ".*", FileHandler::get_filepath() + "\\");
+      ImGuiFileDialog::Instance()->OpenDialog("LoadLabelFeatureData", "Choose the feature data you wanna write to", ".*", FileHandler::get_filepath() + "/");
 
     ImGui::SameLine();
     ImGui::Text("path: %s", LC.feature_output_path.c_str());
@@ -111,7 +111,7 @@ void ShowLabelInformation()
 
     /*----------Load label output data----------*/
     if (ImGui::Button("Load label output data"))
-      ImGuiFileDialog::Instance()->OpenDialog("LoadLabelLabelData", "Choose the label data you wanna write to", ".*", FileHandler::get_filepath() + "\\");
+      ImGuiFileDialog::Instance()->OpenDialog("LoadLabelLabelData", "Choose the label data you wanna write to", ".*", FileHandler::get_filepath() + "/");
 
     ImGui::SameLine();
     ImGui::Text("path: %s", LC.label_output_path.c_str());

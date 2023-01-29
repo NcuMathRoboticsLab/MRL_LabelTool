@@ -369,7 +369,7 @@ LabelController::LabelController() : AnimationController()
 
   label_mouse_area = static_cast<float>(0.05);
 
-  tool_data_path__ = FileHandler::get_filepath() + "\\dataset\\binary_data\\MesTool.dat";
+  tool_data_path__ = FileHandler::get_filepath() + "/dataset/binary_data/MesTool.dat";
 
   if (!std::filesystem::exists(tool_data_path__) || std::filesystem::file_size(tool_data_path__) == 0) {
     std::ofstream tool_data_file__(tool_data_path__);    // just for creating file.
@@ -379,14 +379,14 @@ LabelController::LabelController() : AnimationController()
       exit(1);
     }
 
-    tool_data_file__ << FileHandler::get_filepath() + "\\dataset\\raw_data\\demo_train_xy.txt" << '\n'    // default raw_data_path
-                     << FileHandler::get_filepath() + "\\dataset\\binary_data\\label_using_raw_data_bin.txt" << '\n'    // default raw_bin_path__
-                     << FileHandler::get_filepath() + "\\dataset\\default_data\\default_feature_data.txt" << '\n'    // default feature_output_path
-                     << FileHandler::get_filepath() + "\\dataset\\default_data\\default_label_data.txt" << '\n'    // default label_output_path
-                     << FileHandler::get_filepath() + "\\dataset\\binary_data\\feature_bin.txt" << '\n'    // default feature_bin_path__
-                     << FileHandler::get_filepath() + "\\dataset\\binary_data\\feature_num_bin.txt" << '\n'    // default feature_num_bin_path__
-                     << FileHandler::get_filepath() + "\\dataset\\binary_data\\label_bin.txt" << '\n'    // default label_bin_path__
-                     << FileHandler::get_filepath() + "\\dataset\\binary_data\\label_num_bin.txt";    // default label_num_bin_path__
+    tool_data_file__ << FileHandler::get_filepath() + "/dataset/raw_data/demo_train_xy.txt" << '\n'    // default raw_data_path
+                     << FileHandler::get_filepath() + "/dataset/binary_data/label_using_raw_data_bin.txt" << '\n'    // default raw_bin_path__
+                     << FileHandler::get_filepath() + "/dataset/default_data/default_feature_data.txt" << '\n'    // default feature_output_path
+                     << FileHandler::get_filepath() + "/dataset/default_data/default_label_data.txt" << '\n'    // default label_output_path
+                     << FileHandler::get_filepath() + "/dataset/binary_data/feature_bin.txt" << '\n'    // default feature_bin_path__
+                     << FileHandler::get_filepath() + "/dataset/binary_data/feature_num_bin.txt" << '\n'    // default feature_num_bin_path__
+                     << FileHandler::get_filepath() + "/dataset/binary_data/label_bin.txt" << '\n'    // default label_bin_path__
+                     << FileHandler::get_filepath() + "/dataset/binary_data/label_num_bin.txt";    // default label_num_bin_path__
   }
 
   {

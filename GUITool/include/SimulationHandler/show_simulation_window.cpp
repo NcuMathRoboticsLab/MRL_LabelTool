@@ -46,7 +46,7 @@ void ShowSimulationInformation()
   if (ImGui::TreeNodeEx("Simulation Information")) {
     /*----------Load raw data----------*/
     if (ImGui::Button("Load raw data"))
-      ImGuiFileDialog::Instance()->OpenDialog("LoadSimulationRawData", "Choose your raw data", ".*", FileHandler::get_filepath() + "\\");
+      ImGuiFileDialog::Instance()->OpenDialog("LoadSimulationRawData", "Choose your raw data", ".*", FileHandler::get_filepath() + "/");
 
     ImGui::SameLine();
     ImGui::Text("path: %s", SC.raw_data_path.c_str());
@@ -70,7 +70,7 @@ void ShowSimulationInformation()
 
     /*----------Load trained weight data----------*/
     if (ImGui::Button("Load trained weight data"))
-      ImGuiFileDialog::Instance()->OpenDialog("LoadSimulationWeightData", "Choose your weight data", ".*", FileHandler::get_filepath() + "\\");
+      ImGuiFileDialog::Instance()->OpenDialog("LoadSimulationWeightData", "Choose your weight data", ".*", FileHandler::get_filepath() + "/");
 
     ImGui::SameLine();
     ImGui::Text("path: %s", SC.weight_data_path.c_str());
