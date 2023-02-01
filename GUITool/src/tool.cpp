@@ -61,7 +61,7 @@ int main(int, char **)
 
 
   // Create window with graphics context
-  GLFWwindow *window = glfwCreateWindow(1000, 800, "Detection simulation", NULL, NULL);
+  GLFWwindow *window = glfwCreateWindow(1000, 800, "MRL LabelTool", NULL, NULL);
   if (window == NULL)
     return 1;
   glfwMakeContextCurrent(window);
