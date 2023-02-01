@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(mes_detect_ball)
 
-# C++ edition : C++17
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
