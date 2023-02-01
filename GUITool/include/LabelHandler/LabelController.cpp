@@ -371,7 +371,19 @@ LabelController::LabelController() : AnimationController()
 
   tool_data_path__ = FileHandler::get_filepath() + "/dataset/binary_data/MesTool.dat";
 
-  if (!std::filesystem::exists(tool_data_path__) || std::filesystem::file_size(tool_data_path__) == 0) {
+  bool set_tool_data_file = false;
+  if (!std::filesystem::exists(tool_data_path__))
+    set_tool_data_file = true;
+  else if (std::filesystem::file_size(tool_data_path__) == 0) {
+    std::ifstream infile(tool_data_path__);
+    std::string line;
+    std::getline(infile, line);
+
+    if (!std::filesystem::exists(line))
+      set_tool_data_file = true;
+  }
+
+  if (set_tool_data_file) {
     std::ofstream tool_data_file__(tool_data_path__);    // just for creating file.
     if (tool_data_file__.fail()) {
       std::cerr << "cant open " << tool_data_path__ << '\n';
