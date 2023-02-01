@@ -12,6 +12,7 @@
 #include "normalize.h"
 #include "Eigen/Eigen"
 
+#include <tuple>
 #include <vector>
 #include <cmath>
 #include <iostream>
@@ -26,26 +27,22 @@
  * @param ins The instance of the class.
  */
 template <typename Model>
-concept has_fit = requires(Model ins, const Eigen::MatrixXd &train_X, const Eigen::VectorXd &train_Y, int Iterations, const Eigen::MatrixXd &train_weight)
+concept has_fit = requires(Model ins, const Eigen::MatrixXd &train_X, const Eigen::VectorXd &train_Y, const Eigen::MatrixXd &train_weight, uint32_t Iterations)
 {
-  {
-    ins.store_weight(filepath, outfile)
-    } -> void;    // ok WTF clang-format...
+  {ins.fit(train_X, train_Y, train_weight, Iterations)} -> std::same_as<std::tuple<Eigen::VectorXd, double, bool>>;    // ok WTF clang-format...
 };
 
 /**
  * @param ins The instance of the class.
  */
 template <typename Model>
-concept has_predict = requires(Model ins, const std::string &filepath, std::ifstream &infile)
+concept has_predict = requires(Model ins, const Eigen::MatrixXd &section)
 {
-  {
-    ins.load_weight(filepath, infile)
-    } -> void;
+  {ins.predict(section)} -> std::same_as<Eigen::VectorXd>;
 };
 
 template <typename Module>
-concept valid_Model = has_fir<Module> && has_predict<Module>;
+concept valid_Model = has_fit<Module> && has_predict<Module>;
 
 #else
 
@@ -122,8 +119,8 @@ public:
   Eigen::VectorXd predict(const Eigen::MatrixXd &test_X);    // make prediction
 
 public:
-  void store_weight(const std::string &filepath, std::ofstream &outfile);    // store the weights of Adaboost
-  void load_weight(const std::string &filepath, std::ifstream &infile);    // load the weights before stored.
+  void store_weight(std::ofstream &outfile);    // store the weights of Adaboost
+  void load_weight(std::ifstream &infile);    // load the weights before stored.
   void set_confusion_matrix(const Eigen::MatrixXd &confusion_matrix);    // set the confusion matrix of the Adaboost
   void print_confusion_matrix();    // print the confusion matrix of the Adaboost
 };
@@ -189,7 +186,7 @@ Eigen::VectorXd Adaboost<Model>::predict(const Eigen::MatrixXd &data)
  * @param outfile The file, where to store the weight, provided by the file handler.
  */
 template <typename Model>
-void Adaboost<Model>::store_weight([[maybe_unused]] const std::string &filepath, std::ofstream &outfile)
+void Adaboost<Model>::store_weight(std::ofstream &outfile)
 {
   double recall = static_cast<double>(TP) / (TP + FN);
   double precision = static_cast<double>(TP) / (TP + FP);
@@ -213,7 +210,7 @@ void Adaboost<Model>::store_weight([[maybe_unused]] const std::string &filepath,
  * @param outfile The file, where to load the weight, provided by the file handler.
  */
 template <typename Model>
-void Adaboost<Model>::load_weight([[maybe_unused]] const std::string &filepath, std::ifstream &infile)
+void Adaboost<Model>::load_weight(std::ifstream &infile)
 {
   std::string line;
   std::stringstream stream;
@@ -241,7 +238,7 @@ void Adaboost<Model>::load_weight([[maybe_unused]] const std::string &filepath, 
 
   vec.resize(M);
   for (int i = 0; i < M; ++i) {
-    vec[i].load_weight(infile, stream);
+    vec[i].load_weight(infile);
     stream.str("");
     stream.clear();
   }

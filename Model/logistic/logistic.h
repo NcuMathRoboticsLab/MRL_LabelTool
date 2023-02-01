@@ -32,7 +32,7 @@ public:
 
 public:
   void store_weight(std::ofstream &outfile);    // store the weight vector
-  void load_weight(std::ifstream &infile, std::stringstream &stream);    // load the weight vector
+  void load_weight(std::ifstream &infile);    // load the weight vector
 };
 
 #endif

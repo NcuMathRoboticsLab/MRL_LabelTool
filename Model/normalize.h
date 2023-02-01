@@ -20,8 +20,8 @@ public:
 public:
   void fit(const Eigen::MatrixXd &data);    // calculate the data_min and data_mm
   Eigen::MatrixXd transform(const Eigen::MatrixXd &data);    // do normalization for every column of the data
-  void store_weight(const std::string &filepath, std::ofstream &outfile);    // store the scale of the normalization
-  void load_weight(const std::string &filepath, std::ifstream &infile);    // load the scale of the normalization
+  void store_weight(std::ofstream &outfile);    // store the scale of the normalization
+  void load_weight(std::ifstream &infile);    // load the scale of the normalization
 };
 
 #endif

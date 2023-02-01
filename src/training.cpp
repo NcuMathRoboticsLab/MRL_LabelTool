@@ -21,7 +21,7 @@
 int main()
 {
   const std::string filepath = FileHandler::get_filepath();
-
+  std::cout << __cplusplus << '\n';
   int case_num = 0;
   int sample = 0;
 

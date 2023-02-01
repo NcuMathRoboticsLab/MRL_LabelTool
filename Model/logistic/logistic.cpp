@@ -136,11 +136,12 @@ void logistic::store_weight(std::ofstream &outfile)
  * @param infile The file path, where to load the weight.
  * @param stream For avoiding copying std::stringstream, pass it by reference into function.
  */
-void logistic::load_weight(std::ifstream &infile, std::stringstream &stream)
+void logistic::load_weight(std::ifstream &infile)
 {
   int N = FEATURE_NUM;    // The number of weighting
   w = Eigen::VectorXd::Zero(N);
   std::string line;
+  std::stringstream stream;
 
   getline(infile, line);
   stream << line;

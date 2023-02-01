@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.11)
  
 project(GUITool)
 
-set(CMAKE_CXX_STANDARD 20)
-
 set(GUITool ${PROJECT_SOURCE_DIR})
 
 find_package(OpenGL REQUIRED)
@@ -73,3 +71,5 @@ target_link_libraries(
   $<$<BOOL:${UNIX}>:glfw>
   ${OPENGL_LIBRARIES}
 )
+
+target_compile_features(GUITool PUBLIC cxx_std_20)

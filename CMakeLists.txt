@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(mes_detect_ball)
 
-set(CMAKE_CXX_STANDARD 20)
-
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -66,5 +64,6 @@ add_executable(Training
   $<$<BOOL:${WIN32}>:${APP_ICON_RESOURCE_WINDOWS}>
 )
 
+target_compile_features(Training PUBLIC cxx_std_20)
 add_subdirectory(${THIRD_DIR})
 add_subdirectory(${PROJECT_SOURCE_DIR}/GUITool)

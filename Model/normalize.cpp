@@ -62,7 +62,7 @@ Eigen::MatrixXd Normalizer::transform(const Eigen::MatrixXd &data)
  * @param filepath For debug using, maybe unused.
  * @param outfile The file will store the result of the normalization.
  */
-void Normalizer::store_weight([[maybe_unused]] const std::string &filepath, std::ofstream &outfile)
+void Normalizer::store_weight(std::ofstream &outfile)
 {
   puts("Storing Normalizer data...");
 
@@ -82,7 +82,7 @@ void Normalizer::store_weight([[maybe_unused]] const std::string &filepath, std:
  * @param filepath For debug using, maybe unused.
  * @param infile The file will store the result of the normalization.
  */
-void Normalizer::load_weight([[maybe_unused]] const std::string &filepath, std::ifstream &infile)
+void Normalizer::load_weight(std::ifstream &infile)
 {
   std::string line;
   std::stringstream stream;
