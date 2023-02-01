@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
  
+set(CMAKE_CXX_STANDARD 20)
+
 project(GUITool)
 
 set(GUITool ${PROJECT_SOURCE_DIR})
@@ -72,4 +74,4 @@ target_link_libraries(
   ${OPENGL_LIBRARIES}
 )
 
-target_compile_features(GUITool PUBLIC cxx_std_20)
+target_compile_features(GUITool PRIVATE cxx_std_20)

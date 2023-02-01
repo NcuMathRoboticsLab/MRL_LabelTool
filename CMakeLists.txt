@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.11)
 project(mes_detect_ball)
+
+set(CMAKE_CXX_STANDARD 20)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -9,7 +11,7 @@ if(WIN32)
   if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     find_package(OpenGL REQUIRED)
     MESSAGE("==================== USING MSVC TO COMILE ====================")
-    add_compile_options(/wd4819 /wd4244 /wd4267 /wd4305)
+    add_compile_options(/wd4819 /wd4244 /wd4267 /wd4305 "/Zc:__cplusplus")
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icon/MesIcon.rc")
     set(CMAKE_CXX_FLAGS_DEBUG "/O2")
     set(CMAKE_CXX_FLAGS_RELEASE "/O2")
@@ -64,6 +66,6 @@ add_executable(Training
   $<$<BOOL:${WIN32}>:${APP_ICON_RESOURCE_WINDOWS}>
 )
 
-target_compile_features(Training PUBLIC cxx_std_20)
+target_compile_features(Training PRIVATE cxx_std_20)
 add_subdirectory(${THIRD_DIR})
 add_subdirectory(${PROJECT_SOURCE_DIR}/GUITool)
