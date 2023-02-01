@@ -120,32 +120,28 @@ namespace FileHandler {
      * @brief Check if the weight in class can be stored.
      */
     template <typename, typename = void>
-    struct can_store : std::false_type {
-    };
+    struct can_store : std::false_type {};
 
     template <typename T>
     struct can_store<T, std::void_t<decltype(&T::store_weight)>>
         : std::is_invocable_r<void,
                               decltype(&T::store_weight),
-                              T &,
-                              std::ofstream &> {
-    };
+                              T&,
+                              std::ofstream&> {};
 
 
     /**
      * @brief Check if the weight in class can be loaded.
      */
     template <typename, typename = void>
-    struct can_load : std::false_type {
-    };
+    struct can_load : std::false_type {};
 
     template <typename T>
     struct can_load<T, std::void_t<decltype(&T::load_weight)>>
         : std::is_invocable_r<void,
                               decltype(&T::load_weight),
-                              T &,
-                              std::ifstream &> {
-    };
+                              T&,
+                              std::ifstream&> {};
 
 
     /**
