@@ -21,7 +21,7 @@
 int main()
 {
   const std::string filepath = FileHandler::get_filepath();
-  std::cout << __cplusplus << '\n';
+
   int case_num = 0;
   int sample = 0;
 
@@ -35,19 +35,20 @@ int main()
   std::cin.clear();
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
+  puts("read training data...");
+  Eigen::MatrixXd train_X = LoadMatrix::readDataSet(filepath + "/include/dataset/demo_data/default_train_x.txt", 17000, FEATURE_NUM);    // file, row, col
+
+  puts("reading training label...");
+  Eigen::VectorXd train_Y = LoadMatrix::readLabel(filepath + "/include/dataset/demo_data/default_train_y.txt", 17000);    // file, segment num(row)
+
+  puts("reading testing data...");
+  Eigen::MatrixXd test_X = LoadMatrix::readDataSet(filepath + "/include/dataset/demo_data/default_test_x.txt", 19133, FEATURE_NUM);
+
+  puts("reading testing label...");
+  Eigen::VectorXd test_Y = LoadMatrix::readLabel(filepath + "/include/dataset/demo_data/default_test_y.txt", 19133);
+
   if (case_num == 1) {
     /* fitting */
-    puts("read training data...");
-    Eigen::MatrixXd train_X = LoadMatrix::readDataSet(filepath + "/include/dataset/ball_train_x.txt", 17000, FEATURE_NUM);    // file, row, col
-
-    puts("reading training label...");
-    Eigen::VectorXd train_Y = LoadMatrix::readLabel(filepath + "/include/dataset/ball_train_y.txt", 17000);    // file, segment num(row)
-
-    puts("reading testing data...");
-    Eigen::MatrixXd test_X = LoadMatrix::readDataSet(filepath + "/include/dataset/ball_test_x.txt", 19133, FEATURE_NUM);
-
-    puts("reading testing label...");
-    Eigen::VectorXd test_Y = LoadMatrix::readLabel(filepath + "/include/dataset/ball_test_y.txt", 19133);
 
     Normalizer normalizer;
     normalizer.fit(train_X);
@@ -73,12 +74,6 @@ int main()
     }
   }
   else {
-    puts("reading testing data...");
-    Eigen::MatrixXd test_X = LoadMatrix::readDataSet(filepath + "/include/dataset/ball_test_x.txt", 19133, FEATURE_NUM);
-
-    puts("reading testing label...");
-    Eigen::VectorXd test_Y = LoadMatrix::readLabel(filepath + "/include/dataset/ball_test_y.txt", 19133);
-
     Normalizer normalizer;
     Adaboost<logistic> A;
 
