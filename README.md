@@ -10,7 +10,9 @@ This project also supports C++17.
 
 On Windows10, it builed by Vscode and CMake, you can use Visual Studio, too. On Linux it just builed by CMake.  
 
-If you wanna use this template, you should copy the `lib` file and dll file by yourself.    
+If you wanna use this template, you should copy the `lib` file and dll file by yourself.  
+  
+![](https://github.com/NcuMathRoboticsLab/MRL_LabelTool/blob/main/docs/LabelToolDemo.gif?raw=true)
 
 # Dependencies
 
