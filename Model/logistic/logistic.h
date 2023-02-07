@@ -26,12 +26,12 @@ public:
 public:
   std::tuple<Eigen::VectorXd, double, bool> fit(const Eigen::MatrixXd &train_X, const Eigen::VectorXd &train_Y, const Eigen::MatrixXd &train_weight, uint32_t Iterations);    // training
 
-  Eigen::ArrayXd cal_logistic(const Eigen::ArrayXd &x);    // logistic function
-  Eigen::VectorXd get_label(const Eigen::MatrixXd &section);    // get the label of the section
-  Eigen::VectorXd predict(const Eigen::MatrixXd &section);    // predict the section data
+  Eigen::ArrayXd cal_logistic(const Eigen::ArrayXd &x) const;    // logistic function
+  Eigen::VectorXd get_label(const Eigen::MatrixXd &section) const;    // get the label of the section
+  Eigen::VectorXd predict(const Eigen::MatrixXd &section) const;    // predict the section data
 
 public:
-  void store_weight(std::ofstream &outfile);    // store the weight vector
+  void store_weight(std::ofstream &outfile) const;    // store the weight vector
   void load_weight(std::ifstream &infile);    // load the weight vector
 };
 
