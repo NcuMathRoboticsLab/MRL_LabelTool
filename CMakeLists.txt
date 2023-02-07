@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(mes_detect_ball)
+project(MRL_LabelTool)
 
 set(CMAKE_CXX_STANDARD 20)
 
