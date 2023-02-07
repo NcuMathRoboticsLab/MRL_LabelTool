@@ -76,7 +76,9 @@ namespace FileHandler {
     template <typename T>
     concept can_store = requires(T &ins, std::ofstream &outfile)
     {
-      {ins.store_weight(outfile)} -> std::same_as<void>;    // ok WTF clang-format...
+      {
+        ins.store_weight(outfile)
+        } -> std::same_as<void>;    // ok WTF clang-format...
     };
 
     /**
@@ -85,7 +87,9 @@ namespace FileHandler {
     template <typename T>
     concept can_load = requires(T &ins, std::ifstream &infile)
     {
-      {ins.load_weight(infile)} -> std::same_as<void>;
+      {
+        ins.load_weight(infile)
+        } -> std::same_as<void>;
     };
 
     /**
@@ -120,28 +124,32 @@ namespace FileHandler {
      * @brief Check if the weight in class can be stored.
      */
     template <typename, typename = void>
-    struct can_store : std::false_type {};
+    struct can_store : std::false_type {
+    };
 
     template <typename T>
-    struct can_store<T, std::void_t<decltype(&T::store_weight)>>
+    struct can_store<T, std::void_t<decltype(&T::store_weight)> >
         : std::is_invocable_r<void,
                               decltype(&T::store_weight),
-                              T&,
-                              std::ofstream&> {};
+                              T &,
+                              std::ofstream &> {
+    };
 
 
     /**
      * @brief Check if the weight in class can be loaded.
      */
     template <typename, typename = void>
-    struct can_load : std::false_type {};
+    struct can_load : std::false_type {
+    };
 
     template <typename T>
-    struct can_load<T, std::void_t<decltype(&T::load_weight)>>
+    struct can_load<T, std::void_t<decltype(&T::load_weight)> >
         : std::is_invocable_r<void,
                               decltype(&T::load_weight),
-                              T&,
-                              std::ifstream&> {};
+                              T &,
+                              std::ifstream &> {
+    };
 
 
     /**
@@ -242,8 +250,7 @@ namespace FileHandler {
 
     // compact F1 Score
     if (F1_Score <= old_F1_Score) {
-      std::cerr << "This weight won't be saved since its F1 Score is not better than the original one\n";
-      std::cin.get();
+      std::cout << "This weight won't be saved since its F1 Score is not better than the original one\n";
       return;
     }
 
