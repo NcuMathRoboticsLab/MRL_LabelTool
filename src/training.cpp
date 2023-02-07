@@ -36,16 +36,16 @@ int main()
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
   puts("read training data...");
-  Eigen::MatrixXd train_X = LoadMatrix::readDataSet(filepath + "/include/dataset/demo_data/default_train_x.txt", 17000, FEATURE_NUM);    // file, row, col
+  Eigen::MatrixXd train_X = LoadMatrix::readDataSet(filepath + "/dataset/demo_data/default_train_x.txt", 18268, FEATURE_NUM);    // file, row, col
 
   puts("reading training label...");
-  Eigen::VectorXd train_Y = LoadMatrix::readLabel(filepath + "/include/dataset/demo_data/default_train_y.txt", 17000);    // file, segment num(row)
+  Eigen::VectorXd train_Y = LoadMatrix::readLabel(filepath + "/dataset/demo_data/default_train_y.txt", 18268);    // file, segment num(row)
 
   puts("reading testing data...");
-  Eigen::MatrixXd test_X = LoadMatrix::readDataSet(filepath + "/include/dataset/demo_data/default_test_x.txt", 19133, FEATURE_NUM);
+  Eigen::MatrixXd test_X = LoadMatrix::readDataSet(filepath + "/dataset/demo_data/default_test_x.txt", 17865, FEATURE_NUM);
 
   puts("reading testing label...");
-  Eigen::VectorXd test_Y = LoadMatrix::readLabel(filepath + "/include/dataset/demo_data/default_test_y.txt", 19133);
+  Eigen::VectorXd test_Y = LoadMatrix::readLabel(filepath + "/dataset/demo_data/default_test_y.txt", 17865);
 
   if (case_num == 1) {
     /* fitting */
@@ -56,6 +56,7 @@ int main()
     test_X = normalizer.transform(test_X);
 
     for (int i = 0; i < sample; ++i) {
+      std::cout << "========================================================================================\n";
       std::cout << "training sample " << i + 1 << "...\n";
       puts("start tranning");
       Adaboost<logistic> A(100);
@@ -70,7 +71,7 @@ int main()
       A.set_confusion_matrix(confusion_matrix);
       A.print_confusion_matrix();
 
-      FileHandler::store_weight(confusion_matrix, filepath + "/include/weight_data/adaboost_ball_weight.txt", A, normalizer);
+      FileHandler::store_weight(confusion_matrix, filepath + "/dataset/weight_data/adaboost_ball_weight.txt", A, normalizer);
     }
   }
   else {
@@ -78,7 +79,7 @@ int main()
     Adaboost<logistic> A;
 
     puts("Load Weighting...");
-    FileHandler::load_weight(filepath + "/include/weight_data/adaboost_ball_weight.txt", A, normalizer);
+    FileHandler::load_weight(filepath + "/dataset/weight_data/adaboost_ball_weight.txt", A, normalizer);
 
     puts("Transforming test data...");
     test_X = normalizer.transform(test_X);
