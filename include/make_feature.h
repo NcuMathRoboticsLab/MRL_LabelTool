@@ -60,6 +60,12 @@ namespace MakeFeatures {
    */
   std::tuple<double, double, double> cal_cr(const Eigen::MatrixXd &Seg);
 
+  /**
+   * @brief Calculates the linearity and bounding of the segment.
+   *
+   * @param Seg The segment data matrix. It's an Sn*2 matrix, Sn is the number of segments.
+   * @return std::tuple<double, double, double, double> { bounding_box_long, bounding_box_short, bounding_box_area, total_least_square };
+   */
   std::tuple<double, double, double, double> cal_linearity(Eigen::MatrixXd Seg);
 
   /**
@@ -70,6 +76,12 @@ namespace MakeFeatures {
    */
   Eigen::ArrayXd make_feature(const Eigen::MatrixXd &Seg);
 
+  /**
+   * @brief Transform the segemnt to the feature
+   *
+   * @param section_seg_vec The segment vector
+   * @return Eigen::MatrixXd The feature data
+   */
   Eigen::MatrixXd segment_to_feature(const std::vector<Eigen::MatrixXd> &section_seg_vec);
 
   /**
