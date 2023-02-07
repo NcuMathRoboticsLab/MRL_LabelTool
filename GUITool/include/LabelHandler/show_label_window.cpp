@@ -68,7 +68,7 @@ void ShowLabelInformation()
 
     /*----------Load raw data----------*/
     if (ImGui::Button("Load raw data"))
-      ImGuiFileDialog::Instance()->OpenDialog("LoadLabelRawData", "Choose your raw data", ".*", FileHandler::get_filepath() + "/");
+      ImGuiFileDialog::Instance()->OpenDialog("LoadLabelRawData", "Choose your raw data", ".*", FileHandler::get_filepath() + "/dataset/raw_data/");
 
     ImGui::SameLine();
     ImGui::Text("path: %s", LC.raw_data_path.c_str());
