@@ -29,7 +29,9 @@
 template <typename Model>
 concept has_fit = requires(Model ins, const Eigen::MatrixXd &train_X, const Eigen::VectorXd &train_Y, const Eigen::MatrixXd &train_weight, uint32_t Iterations)
 {
-  {ins.fit(train_X, train_Y, train_weight, Iterations)} -> std::same_as<std::tuple<Eigen::VectorXd, double, bool>>;    // ok WTF clang-format...
+  {
+    ins.fit(train_X, train_Y, train_weight, Iterations)
+    } -> std::same_as<std::tuple<Eigen::VectorXd, double, bool>>;    // ok WTF clang-format...
 };
 
 /**
@@ -38,7 +40,9 @@ concept has_fit = requires(Model ins, const Eigen::MatrixXd &train_X, const Eige
 template <typename Model>
 concept has_predict = requires(Model ins, const Eigen::MatrixXd &section)
 {
-  {ins.predict(section)} -> std::same_as<Eigen::VectorXd>;
+  {
+    ins.predict(section)
+    } -> std::same_as<Eigen::VectorXd>;
 };
 
 template <typename Module>
@@ -55,7 +59,7 @@ struct has_fit : std::false_type {
 };
 
 template <typename Model>
-struct has_fit<Model, std::void_t<decltype(&Model::fit)> >
+struct has_fit<Model, std::void_t<decltype(&Model::fit)>>
     : std::is_invocable_r<std::tuple<Eigen::VectorXd, double, bool>,
                           decltype(&Model::fit),
                           Model &,
@@ -73,7 +77,7 @@ struct has_predict : std::false_type {
 };
 
 template <typename Model>
-struct has_predict<Model, std::void_t<decltype(&Model::predict)> >
+struct has_predict<Model, std::void_t<decltype(&Model::predict)>>
     : std::is_invocable_r<Eigen::VectorXd,
                           decltype(&Model::predict),
                           Model &,
@@ -81,7 +85,7 @@ struct has_predict<Model, std::void_t<decltype(&Model::predict)> >
 };
 
 template <typename Model>
-struct valid_Model : std::conjunction<has_fit<Model>, has_predict<Model> > {
+struct valid_Model : std::conjunction<has_fit<Model>, has_predict<Model>> {
 };
 
 template <typename Model>
@@ -126,7 +130,7 @@ public:
     Eigen::VectorXd w = Eigen::VectorXd::Ones(train_X.rows());
 
     for (int i = 0; i < M; ++i) {
-      std::cout << "Training Weak Learner: " << i + 1 << '\n';
+      std::cout << "\rTraining Weak Learner: " << i + 1 << std::flush;
       w /= w.sum();
 
       const auto [pred_Y, err, all_correct] = vec[i].fit(train_X, train_Y, w, 1000);    // pred_Y is the label it predict, err is the error rate.
@@ -161,6 +165,7 @@ public:
   {
     int R = data.rows();
     Eigen::ArrayXd C = Eigen::ArrayXd::Zero(R);
+
     for (int m = 0; m < M; ++m)
       C += alpha(m) * (2 * vec[m].get_label(data).array() - 1);
 
@@ -168,7 +173,6 @@ public:
   }
 
 public:
-
   /**
    * @brief Store the weight vector of all weak learner in Adaboost.
    *
