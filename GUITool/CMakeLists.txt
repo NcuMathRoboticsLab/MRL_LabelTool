@@ -8,6 +8,12 @@ set(GUITool ${PROJECT_SOURCE_DIR})
 
 find_package(OpenGL REQUIRED)
 
+if(OPENGL_FOUND)
+  message('OPENGL_FOUND-is-true')
+else()
+  message('OPENGL_FOUND-is-false')
+endif()
+
 include_directories(
   ${OPENGL_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
@@ -57,12 +63,6 @@ add_executable(
 
   $<$<BOOL:${WIN32}>:${APP_ICON_RESOURCE_WINDOWS}>
 )
-
-if(OPENGL_FOUND)
-  message('OPENGL_FOUND-is-true')
-else()
-  message('OPENGL_FOUND-is-false')
-endif()
 
 target_link_libraries(
   GUITool

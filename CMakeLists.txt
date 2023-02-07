@@ -9,7 +9,6 @@ endif()
 
 if(WIN32)
   if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    find_package(OpenGL REQUIRED)
     MESSAGE("==================== USING MSVC TO COMILE ====================")
     add_compile_options(/wd4819 /wd4244 /wd4267 /wd4305 "/Zc:__cplusplus")
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icon/MesIcon.rc")
