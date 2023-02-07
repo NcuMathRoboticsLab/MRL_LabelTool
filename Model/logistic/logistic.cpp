@@ -8,16 +8,17 @@
 
 #include "logistic.h"
 #include "Eigen/Eigen"
+#include "make_feature.h"
 
 #include <vector>
+#include <cmath>
+#include <filesystem>
 #include <iostream>
 #include <algorithm>
 #include <tuple>
 #include <random>
 #include <fstream>
 #include <sstream>
-
-constexpr uint32_t FEATURE_NUM = 10;
 
 /**
  * @brief Training the weight in weak learner
@@ -47,7 +48,7 @@ logistic::fit(const Eigen::MatrixXd &train_X, const Eigen::VectorXd &train_Y, co
   double alpha = 0.1;
 
   for (uint32_t i = 0; i < Iterations; ++i) {
-    double lr = alpha / (1 + i / 10);
+    double lr = alpha / (1 + i / FEATURE_NUM);
 
     Eigen::ArrayXd hx = (train_X * w).array() + w0;
     hx = cal_logistic(hx);
@@ -85,9 +86,9 @@ logistic::fit(const Eigen::MatrixXd &train_X, const Eigen::VectorXd &train_Y, co
  * @param x The input array.
  * @return Eigen::ArrayXd
  */
-Eigen::ArrayXd logistic::cal_logistic(const Eigen::ArrayXd &x)
+Eigen::ArrayXd logistic::cal_logistic(const Eigen::ArrayXd &x) const
 {
-  return ((x / 2).tanh() + 1) / 2;
+  return (x.tanh() / 2 + 1) / 2;
 }
 
 /**
@@ -96,7 +97,7 @@ Eigen::ArrayXd logistic::cal_logistic(const Eigen::ArrayXd &x)
  * @param data The feature matrix of all section, the size is Sn*5, Sn is the total number of the data, 5 means the number of the feature.
  * @return Eigen::VectorXd The probability of the data get from the logistic function.
  */
-Eigen::VectorXd logistic::predict(const Eigen::MatrixXd &data)
+Eigen::VectorXd logistic::predict(const Eigen::MatrixXd &data) const
 {
   Eigen::ArrayXd hx = (data * w).array() + w0;
 
@@ -109,7 +110,7 @@ Eigen::VectorXd logistic::predict(const Eigen::MatrixXd &data)
  * @param data The feature matrix of all section, the size is Sn*5, Sn is the total number of the data, 5 means the number of the feature.
  * @return Eigen::VectorXd The label of the data. If the probability get from the logistic function >= 0.5, output 1, otherwise 0.
  */
-Eigen::VectorXd logistic::get_label(const Eigen::MatrixXd &data)
+Eigen::VectorXd logistic::get_label(const Eigen::MatrixXd &data) const
 {
   Eigen::ArrayXd hx = (data * w).array() + w0;
 
@@ -121,13 +122,15 @@ Eigen::VectorXd logistic::get_label(const Eigen::MatrixXd &data)
  *
  * @param outfile The file path, where to store the weight.
  */
-void logistic::store_weight(std::ofstream &outfile)
+void logistic::store_weight(std::ofstream &outfile) const
 {
   uint32_t N = FEATURE_NUM;
 
   outfile << w0 << '\n';
-  for (uint32_t i = 0; i < N; ++i)
-    outfile << w(i) << " \n"[i == N - 1];
+  for (uint32_t i = 0; i < FEATURE_NUM; ++i)
+    outfile << w(i) << ' ';
+
+  outfile << '\n';
 }
 
 /**
@@ -138,8 +141,7 @@ void logistic::store_weight(std::ofstream &outfile)
  */
 void logistic::load_weight(std::ifstream &infile)
 {
-  int N = FEATURE_NUM;    // The number of weighting
-  w = Eigen::VectorXd::Zero(N);
+  w = Eigen::VectorXd::Zero(FEATURE_NUM);
   std::string line;
   std::stringstream stream;
 
@@ -151,7 +153,7 @@ void logistic::load_weight(std::ifstream &infile)
 
   getline(infile, line);
   stream << line;
-  for (int i = 0; i < N; ++i) {
+  for (int i = 0; i < FEATURE_NUM; ++i) {
     double buff;
     stream >> buff;
     w(i) = buff;
