@@ -80,7 +80,7 @@ namespace metric {
 
     std::vector<int> valid_index;    // valid point index
     for (int i = 0; i < ROWS; ++i) {
-      if ((x(i) != 0 || y(i) != 0) && (std::isnormal(x(i)) && std::isnormal(y(i))))    // if the xy is [0,0], it's not valid; if the x or y is sth like nan, it's not valid too
+      if ((x(i) != 0 || y(i) != 0) && (std::isfinite(x(i)) && std::isfinite(y(i))))    // if the xy is [0,0], it's not valid; if the x or y is sth like nan, it's not valid too
         valid_index.emplace_back(i);
     }
     int validsize = valid_index.size();    // the number of valid point in the section.
