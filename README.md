@@ -1,7 +1,7 @@
 # MRL_LabelTool
 
 (The video was speeking in Chinese)  
-How to use: https://www.youtube.com/watch?v=m87yXTsJ6vg&t=5s    
+How to use: https://www.youtube.com/watch?v=m87yXTsJ6vg    
 Build Tutorial: https://www.youtube.com/watch?v=PMmqYjvkA2Y
 
 Noticed that the name of the project folder(root folder) must be `MRL_LabelTool`
