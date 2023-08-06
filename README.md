@@ -1,6 +1,6 @@
 # MRL_LabelTool
 
-(The video was speeking in Chinese)
+(The video was speeking in Chinese)  
 How to use: https://www.youtube.com/watch?v=m87yXTsJ6vg&t=5s    
 Build Tutorial: https://www.youtube.com/watch?v=PMmqYjvkA2Y
 
