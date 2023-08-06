@@ -27,22 +27,20 @@
  * @param ins The instance of the class.
  */
 template <typename Model>
-concept has_fit = requires(Model ins, const Eigen::MatrixXd &train_X, const Eigen::VectorXd &train_Y, const Eigen::MatrixXd &train_weight, uint32_t Iterations)
-{
+concept has_fit = requires(Model ins, const Eigen::MatrixXd &train_X, const Eigen::VectorXd &train_Y, const Eigen::MatrixXd &train_weight, uint32_t Iterations) {
   {
     ins.fit(train_X, train_Y, train_weight, Iterations)
-    } -> std::same_as<std::tuple<Eigen::VectorXd, double, bool>>;    // ok WTF clang-format...
+  } -> std::same_as<std::tuple<Eigen::VectorXd, double, bool>>;
 };
 
 /**
  * @param ins The instance of the class.
  */
 template <typename Model>
-concept has_predict = requires(Model ins, const Eigen::MatrixXd &section)
-{
+concept has_predict = requires(Model ins, const Eigen::MatrixXd &section) {
   {
     ins.predict(section)
-    } -> std::same_as<Eigen::VectorXd>;
+  } -> std::same_as<Eigen::VectorXd>;
 };
 
 template <typename Module>
