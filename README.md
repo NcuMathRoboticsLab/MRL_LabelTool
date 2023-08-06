@@ -21,7 +21,7 @@ On Linux you can just build by CMake.
 There is an Adaboost with logistic regression example in this project.    
 In this courese, you must implement your own model, otherwise you won't pass the course.
 
-If you wanna implement your model in this project folder:    
+If you wanna implement your model in this project directly.    
 To make your own feature, you can modify the "include/make_feature.h" file.    
 To make you own Model, you can add your model in the `model` folder, notice that there must be two member functions, `fit` and `predict` in your model.
 
