@@ -2276,7 +2276,7 @@ namespace IGFD {
   void IGFD::FileManager::DrawPathComposer(const FileDialogInternal &vFileDialogInternal)
   {
     if (IMGUI_BUTTON(resetButtonString)) {
-      SetCurrentPath(FileHandler::get_filepath() + "\\");
+      SetCurrentPath(FileHandler::get_MRL_project_root() + "\\");
       OpenCurrentPath(vFileDialogInternal);
     }
     if (ImGui::IsItemHovered())

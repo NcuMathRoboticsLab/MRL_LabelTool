@@ -65,7 +65,7 @@ namespace FileHandler {
    * @param filepath the executable file path, which is argv[0].
    * @return std::string The project directory path
    */
-  std::string get_filepath();
+  std::string get_MRL_project_root();
 
   namespace detail {
 #if __cplusplus >= 202002L

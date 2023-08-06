@@ -20,7 +20,7 @@
 
 int main()
 {
-  const std::string filepath = FileHandler::get_filepath();
+  const std::string filepath = FileHandler::get_MRL_project_root();
 
   int case_num = 0;
   int sample = 0;

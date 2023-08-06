@@ -116,7 +116,7 @@ namespace FileHandler {
    *
    * @return std::string The project directory path
    */
-  std::string get_filepath()
+  std::string get_MRL_project_root()
   {
     namespace fs = std::filesystem;
 

@@ -369,7 +369,7 @@ LabelController::LabelController() : AnimationController()
 
   label_mouse_area = static_cast<float>(0.05);
 
-  tool_data_path__ = FileHandler::get_filepath() + "/dataset/binary_data/MesTool.dat";
+  tool_data_path__ = FileHandler::get_MRL_project_root() + "/dataset/binary_data/MesTool.dat";
 
   bool set_tool_data_file = false;
   if (!std::filesystem::exists(tool_data_path__) || std::filesystem::file_size(tool_data_path__) == 0)
@@ -393,14 +393,14 @@ LabelController::LabelController() : AnimationController()
       exit(1);
     }
 
-    tool_data_file__ << FileHandler::get_filepath() + "/dataset/raw_data/demo_train_xy.txt" << '\n'    // default raw_data_path
-                     << FileHandler::get_filepath() + "/dataset/binary_data/label_using_raw_data_bin.txt" << '\n'    // default raw_bin_path__
-                     << FileHandler::get_filepath() + "/dataset/default_data/default_feature_data.txt" << '\n'    // default feature_output_path
-                     << FileHandler::get_filepath() + "/dataset/default_data/default_label_data.txt" << '\n'    // default label_output_path
-                     << FileHandler::get_filepath() + "/dataset/binary_data/feature_bin.txt" << '\n'    // default feature_bin_path__
-                     << FileHandler::get_filepath() + "/dataset/binary_data/feature_num_bin.txt" << '\n'    // default feature_num_bin_path__
-                     << FileHandler::get_filepath() + "/dataset/binary_data/label_bin.txt" << '\n'    // default label_bin_path__
-                     << FileHandler::get_filepath() + "/dataset/binary_data/label_num_bin.txt";    // default label_num_bin_path__
+    tool_data_file__ << FileHandler::get_MRL_project_root() + "/dataset/raw_data/demo_train_xy.txt" << '\n'    // default raw_data_path
+                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_using_raw_data_bin.txt" << '\n'    // default raw_bin_path__
+                     << FileHandler::get_MRL_project_root() + "/dataset/default_data/default_feature_data.txt" << '\n'    // default feature_output_path
+                     << FileHandler::get_MRL_project_root() + "/dataset/default_data/default_label_data.txt" << '\n'    // default label_output_path
+                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/feature_bin.txt" << '\n'    // default feature_bin_path__
+                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/feature_num_bin.txt" << '\n'    // default feature_num_bin_path__
+                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_bin.txt" << '\n'    // default label_bin_path__
+                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_num_bin.txt";    // default label_num_bin_path__
   }
 
   {
@@ -419,8 +419,8 @@ LabelController::LabelController() : AnimationController()
     std::getline(tool_data_file__, feature_num_bin_path__);
     std::getline(tool_data_file__, label_bin_path__);
     std::getline(tool_data_file__, label_num_bin_path__);
-    buf_feature_path__ = FileHandler::get_filepath() + "/dataset/binary_data/tmp_feature_buffer_data";
-    buf_label_path__ = FileHandler::get_filepath() + "/dataset/binary_data/tmp_lable_buffer_data";
+    buf_feature_path__ = FileHandler::get_MRL_project_root() + "/dataset/binary_data/tmp_feature_buffer_data";
+    buf_label_path__ = FileHandler::get_MRL_project_root() + "/dataset/binary_data/tmp_lable_buffer_data";
   }
 
   if (!std::filesystem::exists(feature_bin_path__)) std::ofstream create_file(feature_bin_path__);    // just for creating file.
