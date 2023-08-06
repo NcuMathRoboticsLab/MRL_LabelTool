@@ -1,14 +1,18 @@
 # MRL_LabelTool
 
+(The video was speeking in Chinese)
 How to use: https://www.youtube.com/watch?v=m87yXTsJ6vg&t=5s    
 Build Tutorial: https://www.youtube.com/watch?v=PMmqYjvkA2Y
+
+Noticed that the name of the project folder(root folder) must be `MRL_LabelTool`
 
 This is an label tool for MRL Project, it include two windows, which can help you label the data and check the Model.   
 
 This project use C++20, Eigen3, ImGUI, ImPlot, ImGuiFileDialog to build, it was all included in `3rdparty` folder.  
 This project also supports C++17.
 
-On Windows10, it builed by Vscode and CMake, you can use Visual Studio, too. On Linux it just builed by CMake.  
+On Windows10, it builed by Vscode and CMake, you can use Visual Studio, too.  
+On Linux you can just build by CMake.  
 
 If you wanna change the feature, modify the "include/make_feature.h" file.
   
