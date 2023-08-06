@@ -53,8 +53,7 @@ concept valid_Model = has_fit<Module> && has_predict<Module>;
  * @brief Check if the class has `fit` function
  */
 template <typename, typename = void>
-struct has_fit : std::false_type {
-};
+struct has_fit : std::false_type {};
 
 template <typename Model>
 struct has_fit<Model, std::void_t<decltype(&Model::fit)>>
@@ -64,27 +63,23 @@ struct has_fit<Model, std::void_t<decltype(&Model::fit)>>
                           const Eigen::MatrixXd &,
                           const Eigen::VectorXd &,
                           const Eigen::MatrixXd &,
-                          int> {
-};
+                          int> {};
 
 /**
  * @brief Check if the class has `predict` function.
  */
 template <typename, typename = void>
-struct has_predict : std::false_type {
-};
+struct has_predict : std::false_type {};
 
 template <typename Model>
 struct has_predict<Model, std::void_t<decltype(&Model::predict)>>
     : std::is_invocable_r<Eigen::VectorXd,
                           decltype(&Model::predict),
                           Model &,
-                          const Eigen::MatrixXd &> {
-};
+                          const Eigen::MatrixXd &> {};
 
 template <typename Model>
-struct valid_Model : std::conjunction<has_fit<Model>, has_predict<Model>> {
-};
+struct valid_Model : std::conjunction<has_fit<Model>, has_predict<Model>> {};
 
 template <typename Model>
 constexpr bool valid_Model_v = valid_Model<Model>::value;

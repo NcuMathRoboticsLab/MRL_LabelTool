@@ -74,22 +74,20 @@ namespace FileHandler {
      * @param ins The instance of the class.
      */
     template <typename T>
-    concept can_store = requires(T &ins, std::ofstream &outfile)
-    {
+    concept can_store = requires(T &ins, std::ofstream &outfile) {
       {
         ins.store_weight(outfile)
-        } -> std::same_as<void>;    // ok WTF clang-format...
+      } -> std::same_as<void>;    // ok WTF clang-format...
     };
 
     /**
      * @param ins The instance of the class.
      */
     template <typename T>
-    concept can_load = requires(T &ins, std::ifstream &infile)
-    {
+    concept can_load = requires(T &ins, std::ifstream &infile) {
       {
         ins.load_weight(infile)
-        } -> std::same_as<void>;
+      } -> std::same_as<void>;
     };
 
     /**
@@ -100,7 +98,8 @@ namespace FileHandler {
      * @param first The head of parameter pack, a class instance.
      */
     template <typename T>
-    void store_weight_impl(std::ofstream &outfile, T &ins) requires can_store<T>    // Check if the instance implemented the `store_weight` method by Detection Idioms(Concept requires)
+    void store_weight_impl(std::ofstream &outfile, T &ins)
+      requires can_store<T>    // Check if the instance implemented the `store_weight` method by Detection Idioms(Concept requires)
     {
       ins.store_weight(outfile);
     }
@@ -113,7 +112,8 @@ namespace FileHandler {
      * @param first The head of parameter pack, a class instance.
      */
     template <typename T>
-    void load_weight_impl(std::ifstream &infile, T &ins) requires can_load<T>    // Check if the instance implemented the `load_weight` method by Detection Idioms(Concept requires)
+    void load_weight_impl(std::ifstream &infile, T &ins)
+      requires can_load<T>    // Check if the instance implemented the `load_weight` method by Detection Idioms(Concept requires)
     {
       ins.load_weight(infile);
     }
@@ -124,32 +124,28 @@ namespace FileHandler {
      * @brief Check if the weight in class can be stored.
      */
     template <typename, typename = void>
-    struct can_store : std::false_type {
-    };
+    struct can_store : std::false_type {};
 
     template <typename T>
     struct can_store<T, std::void_t<decltype(&T::store_weight)> >
         : std::is_invocable_r<void,
                               decltype(&T::store_weight),
                               T &,
-                              std::ofstream &> {
-    };
+                              std::ofstream &> {};
 
 
     /**
      * @brief Check if the weight in class can be loaded.
      */
     template <typename, typename = void>
-    struct can_load : std::false_type {
-    };
+    struct can_load : std::false_type {};
 
     template <typename T>
     struct can_load<T, std::void_t<decltype(&T::load_weight)> >
         : std::is_invocable_r<void,
                               decltype(&T::load_weight),
                               T &,
-                              std::ifstream &> {
-    };
+                              std::ifstream &> {};
 
 
     /**
