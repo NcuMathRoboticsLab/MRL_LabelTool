@@ -124,8 +124,6 @@ Eigen::VectorXd logistic::get_label(const Eigen::MatrixXd &data) const
  */
 void logistic::store_weight(std::ofstream &outfile) const
 {
-  uint32_t N = FEATURE_NUM;
-
   outfile << w0 << '\n';
   for (uint32_t i = 0; i < FEATURE_NUM; ++i)
     outfile << w(i) << ' ';
