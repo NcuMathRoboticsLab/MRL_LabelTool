@@ -157,7 +157,7 @@ namespace MakeFeatures {
   Eigen::MatrixXd segment_to_feature(const std::vector<Eigen::MatrixXd> &section_seg_vec)
   {
     Eigen::MatrixXd feature_data(section_seg_vec.size(), FEATURE_NUM);
-    for (int i{}; i < section_seg_vec.size(); ++i)
+    for (int i{}; i < static_cast<int>(section_seg_vec.size()); ++i)
       feature_data.row(i) = make_feature(section_seg_vec[i]);
 
     return feature_data;

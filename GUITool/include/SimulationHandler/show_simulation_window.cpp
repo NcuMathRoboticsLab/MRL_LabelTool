@@ -243,7 +243,7 @@ void ShowSimulation()
       Eigen::MatrixXd target_feature_matrix = normalizer.transform(SC.feature_matrix);
       Eigen::VectorXd pred_Y = Model.predict(target_feature_matrix);
 
-      for (int i = 0; i < SC.segment_vec.size(); ++i) {
+      for (int i = 0; i < static_cast<int>(SC.segment_vec.size()); ++i) {
         Eigen::ArrayXd segment_x_data = SC.segment_vec[i].col(0).array();
         Eigen::ArrayXd segment_y_data = SC.segment_vec[i].col(1).array();
 
