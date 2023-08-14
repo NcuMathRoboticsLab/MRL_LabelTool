@@ -26,6 +26,8 @@ target_link_libraries(
 
 target_include_directories(
   IMFD_LIB PUBLIC
+  ${PROJECT_HEADER}
+  ${EIGEN3_INCLUDE_DIRS}
   ${THIRD_DIR}/imgui
   ${THIRD_DIR}/ImGuiFileDialog
   ${OPENGL_INCLUDE_DIRS}
