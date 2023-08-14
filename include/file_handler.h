@@ -9,7 +9,6 @@
  * @date 2022-11-18
  */
 
-#include "normalize.h"
 #include "Eigen/Eigen"
 
 #include <string>
