@@ -4,6 +4,26 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(GUITool)
 
+if(WIN32)
+  if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    MESSAGE("==================== USING MSVC TO COMILE ====================")
+    add_compile_options(/wd4819 /wd4244 /wd4267 /wd4305 "/Zc:__cplusplus")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_SOURCE_DIR}/icon/MesIcon.rc")
+    set(CMAKE_CXX_FLAGS_DEBUG "/O2")
+    set(CMAKE_CXX_FLAGS_RELEASE "/O2")
+  else()
+    MESSAGE("==================== USING MINGW TO COMILE ====================")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -mwindows -Wa,-mbig-obj") # mingw compile flag (the output was weird idk why).
+    set(CMAKE_CXX_FLAGS_DEBUG "-O3")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+  endif()
+else()
+  set(CMAKE_CXX_FLAGS "-Wall -Wextra -mwindows")
+  set(CMAKE_CXX_FLAGS_DEBUG "-g -O3")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+endif()
+
 find_package(OpenGL REQUIRED)
 if(OPENGL_FOUND)
   message('OPENGL_FOUND-is-true')
@@ -27,10 +47,6 @@ include_directories(
   ${GUITOOL_DIR}/include/LabelHandler
   ${GUITOOL_DIR}/include/SimulationHandler
 )
-
-if(WIN32)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-endif()
 
 add_executable(
   GUITool 
