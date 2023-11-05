@@ -102,6 +102,7 @@ void ShowSimulationInformation()
 
     if (ImGui::Button("720")) {
       SC.HZ = 720;
+      SC.transform_frame();
 
       if (current_HZ != SC.HZ) {
         current_HZ = SC.HZ;
@@ -116,6 +117,7 @@ void ShowSimulationInformation()
     ImGui::SameLine();
     if (ImGui::Button("360")) {
       SC.HZ = 360;
+      SC.transform_frame();
 
       if (current_HZ != SC.HZ) {
         current_HZ = SC.HZ;

@@ -134,6 +134,7 @@ void ShowLabelInformation()
 
     if (ImGui::Button("720")) {
       LC.HZ = 720;
+      LC.load_data = true;
 
       if (current_HZ != LC.HZ) {
         current_HZ = LC.HZ;
@@ -148,6 +149,7 @@ void ShowLabelInformation()
     ImGui::SameLine();
     if (ImGui::Button("360")) {
       LC.HZ = 360;
+      LC.load_data = true;
 
       if (current_HZ != LC.HZ) {
         current_HZ = LC.HZ;
