@@ -129,7 +129,7 @@ void AnimationController::check_auto_play()
 AnimationController::AnimationController()
 {
   fps = 60;
-  HZ = 720;
+  HZ = 360;
   frame = 0, max_frame = 0;
   window_size = 750;
 
