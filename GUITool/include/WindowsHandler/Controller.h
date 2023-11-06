@@ -50,6 +50,7 @@ protected:
   bool is_xydata;
 
   std::chrono::system_clock::time_point _current_time;
+  std::string _tool_data_path;
   std::string _raw_bin_path;
   std::ifstream _raw_bin_file;
   bool _raw_bin_open;

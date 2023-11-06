@@ -89,7 +89,7 @@ void AnimationController::transform_frame()
   is_xydata = !rtheta_data;
 
   max_frame /= HZ;
-  --max_frame;
+  --max_frame;    // 0 ~ max_frame-1
 
   _raw_bin_file.open(_raw_bin_path, std::ios::in | std::ios::binary);
   if (_raw_bin_file.fail()) {
@@ -137,7 +137,6 @@ void AnimationController::check_auto_play()
 AnimationController::AnimationController()
 {
   fps = 60;
-  HZ = 360;
   frame = 0, max_frame = 0;
   window_size = 750;
 
@@ -147,7 +146,6 @@ AnimationController::AnimationController()
   auto_play = false;
   replay = false;
 
-  xy_data = Eigen::MatrixXd::Zero(HZ, 2);
   _raw_bin_open = false;
   is_xydata = false;
 }
