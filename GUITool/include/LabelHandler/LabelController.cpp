@@ -127,6 +127,14 @@ void LabelController::output_label_data()
 }
 
 /**
+ * @brief Output the xy data of all segments in all frames
+ *
+ */
+void LabelController::output_xy_data()
+{
+}
+
+/**
  * @brief clean the file had been wrote, and reset the corresponding member.
  */
 void LabelController::check_clean_data()
@@ -385,39 +393,39 @@ LabelController::LabelController() : AnimationController()
   }
 
   if (set_tool_data_file) {
-    std::ofstream tool_data_file__(_tool_data_path, std::ios::out | std::ios::trunc);
-    if (tool_data_file__.fail()) {
+    std::ofstream _tool_data_file(_tool_data_path, std::ios::out | std::ios::trunc);
+    if (_tool_data_file.fail()) {
       std::cerr << "cant open " << _tool_data_path << '\n';
       std::cin.get();
       exit(1);
     }
 
-    tool_data_file__ << FileHandler::get_MRL_project_root() + "/dataset/raw_data/demo_train_xy.txt" << '\n'    // default raw_data_path
-                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_using_raw_data_bin.txt" << '\n'    // default _raw_bin_path
-                     << FileHandler::get_MRL_project_root() + "/dataset/default_data/default_feature_data.txt" << '\n'    // default feature_output_path
-                     << FileHandler::get_MRL_project_root() + "/dataset/default_data/default_label_data.txt" << '\n'    // default label_output_path
-                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/feature_bin.txt" << '\n'    // default _feature_bin_path
-                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/feature_num_bin.txt" << '\n'    // default _feature_num_bin_path
-                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_bin.txt" << '\n'    // default _label_bin_path
-                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_num_bin.txt";    // default _label_num_bin_path
+    _tool_data_file << FileHandler::get_MRL_project_root() + "/dataset/raw_data/demo_train_xy.txt" << '\n'    // default raw_data_path
+                    << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_using_raw_data_bin.txt" << '\n'    // default _raw_bin_path
+                    << FileHandler::get_MRL_project_root() + "/dataset/default_data/default_feature_data.txt" << '\n'    // default feature_output_path
+                    << FileHandler::get_MRL_project_root() + "/dataset/default_data/default_label_data.txt" << '\n'    // default label_output_path
+                    << FileHandler::get_MRL_project_root() + "/dataset/binary_data/feature_bin.txt" << '\n'    // default _feature_bin_path
+                    << FileHandler::get_MRL_project_root() + "/dataset/binary_data/feature_num_bin.txt" << '\n'    // default _feature_num_bin_path
+                    << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_bin.txt" << '\n'    // default _label_bin_path
+                    << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_num_bin.txt";    // default _label_num_bin_path
   }
 
   {
-    std::ifstream tool_data_file__(_tool_data_path);
-    if (tool_data_file__.fail()) {
+    std::ifstream _tool_data_file(_tool_data_path);
+    if (_tool_data_file.fail()) {
       std::cerr << "cant open " << _tool_data_path << '\n';
       std::cin.get();
       exit(1);
     }
 
-    std::getline(tool_data_file__, raw_data_path);
-    std::getline(tool_data_file__, _raw_bin_path);
-    std::getline(tool_data_file__, feature_output_path);
-    std::getline(tool_data_file__, label_output_path);
-    std::getline(tool_data_file__, _feature_bin_path);
-    std::getline(tool_data_file__, _feature_num_bin_path);
-    std::getline(tool_data_file__, _label_bin_path);
-    std::getline(tool_data_file__, _label_num_bin_path);
+    std::getline(_tool_data_file, raw_data_path);
+    std::getline(_tool_data_file, _raw_bin_path);
+    std::getline(_tool_data_file, feature_output_path);
+    std::getline(_tool_data_file, label_output_path);
+    std::getline(_tool_data_file, _feature_bin_path);
+    std::getline(_tool_data_file, _feature_num_bin_path);
+    std::getline(_tool_data_file, _label_bin_path);
+    std::getline(_tool_data_file, _label_num_bin_path);
     _buf_feature_path = FileHandler::get_MRL_project_root() + "/dataset/binary_data/tmp_feature_buffer_data";
     _buf_label_path = FileHandler::get_MRL_project_root() + "/dataset/binary_data/tmp_lable_buffer_data";
   }
@@ -489,19 +497,19 @@ LabelController::~LabelController()
   std::filesystem::remove(_buf_feature_path);
   std::filesystem::remove(_buf_label_path);
 
-  std::ofstream tool_data_file__(_tool_data_path);
-  if (tool_data_file__.fail()) {
+  std::ofstream _tool_data_file(_tool_data_path);
+  if (_tool_data_file.fail()) {
     std::cerr << "cant open " << _tool_data_path << '\n';
     std::cin.get();
     exit(1);
   }
 
-  tool_data_file__ << raw_data_path << '\n'
-                   << _raw_bin_path << '\n'
-                   << feature_output_path << '\n'
-                   << label_output_path << '\n'
-                   << _feature_bin_path << '\n'
-                   << _feature_num_bin_path << '\n'
-                   << _label_bin_path << '\n'
-                   << _label_num_bin_path;
+  _tool_data_file << raw_data_path << '\n'
+                  << _raw_bin_path << '\n'
+                  << feature_output_path << '\n'
+                  << label_output_path << '\n'
+                  << _feature_bin_path << '\n'
+                  << _feature_num_bin_path << '\n'
+                  << _label_bin_path << '\n'
+                  << _label_num_bin_path;
 }
