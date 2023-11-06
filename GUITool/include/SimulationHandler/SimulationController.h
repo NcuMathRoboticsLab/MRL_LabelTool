@@ -8,6 +8,7 @@ public:
   void check_update_frame() override;
 
   SimulationController();
+  ~SimulationController();
 
 public:
   std::string weight_data_path;
