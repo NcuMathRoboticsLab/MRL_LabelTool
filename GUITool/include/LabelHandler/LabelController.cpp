@@ -190,7 +190,6 @@ void LabelController::check_load_data()
   if (load_data) {
     load_data = false;
     clean_data = true;
-    check_clean_data();
     transform_frame();
 
     // resize the information vector
