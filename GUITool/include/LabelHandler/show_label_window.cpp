@@ -324,8 +324,8 @@ void ShowLabel()
 
   LC.check_auto_play();
   ShowLabelInformation();
-  LC.check_clean_data();
   LC.check_load_data();
+  LC.check_clean_data();
   LC.check_update_frame();
 
   // draw point
