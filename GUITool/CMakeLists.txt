@@ -42,6 +42,7 @@ include_directories(
   ${THIRD_DIR}/imgui
   ${THIRD_DIR}/implot
   ${THIRD_DIR}/ImGuiFileDialog
+  ${THIRD_DIR}/nlohmann
   ${GUITOOL_DIR}/include/
   ${GUITOOL_DIR}/include/WindowsHandler
   ${GUITOOL_DIR}/include/LabelHandler
