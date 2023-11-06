@@ -17,13 +17,8 @@
 
 #include <vector>
 
-struct LabelController : public AnimationController {
+class LabelController : public AnimationController {
 public:
-  void write_bin_feature_data__(const int feature_index, const Eigen::MatrixXd &feature_matrix);
-  void write_bin_feature_num_data__(const int nums);
-  void write_bin_label_data__(const int label_index, const std::vector<int> &segment_label);
-  void write_bin_label_num_data__(const int nums);
-
   void output_feature_data();
   void output_label_data();
 
@@ -34,6 +29,12 @@ public:
 
   LabelController();
   ~LabelController();
+
+private:
+  void _write_bin_feature_data(const int feature_index, const Eigen::MatrixXd &feature_matrix);
+  void _write_bin_feature_num_data(const int nums);
+  void _write_bin_label_data(const int label_index, const std::vector<int> &segment_label);
+  void _write_bin_label_num_data(const int nums);
 
 public:
   bool save_label;
@@ -65,18 +66,18 @@ public:
   std::vector<int> feature_index_vec;
 
 private:
-  std::string tool_data_path__;
-  std::string feature_bin_path__;
-  std::string feature_num_bin_path__;
-  std::string label_bin_path__;
-  std::string label_num_bin_path__;
-  std::string buf_feature_path__;
-  std::string buf_label_path__;
+  std::string _tool_data_path;
+  std::string _feature_bin_path;
+  std::string _feature_num_bin_path;
+  std::string _label_bin_path;
+  std::string _label_num_bin_path;
+  std::string _buf_feature_path;
+  std::string _buf_label_path;
 
-  std::fstream feature_bin_file__;
-  std::fstream feature_num_bin_file__;
-  std::fstream label_bin_file__;
-  std::fstream label_num_bin_file__;
+  std::fstream _feature_bin_file;
+  std::fstream _feature_num_bin_file;
+  std::fstream _label_bin_file;
+  std::fstream _label_num_bin_file;
 };
 
 #endif

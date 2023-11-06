@@ -31,7 +31,7 @@ SimulationController::SimulationController()
   Target_X = 0.0, Target_Y = 0.0;
 
   raw_data_path = FileHandler::get_MRL_project_root() + "/dataset/raw_data/demo_test_xy.txt";
-  raw_bin_path__ = FileHandler::get_MRL_project_root() + "/dataset/binary_data/simulation_using_raw_data_bin.txt";
+  _raw_bin_path = FileHandler::get_MRL_project_root() + "/dataset/binary_data/simulation_using_raw_data_bin.txt";
 
   weight_data_path = FileHandler::get_MRL_project_root() + "/dataset/weight_data/adaboost_ball_weight.txt";
 
