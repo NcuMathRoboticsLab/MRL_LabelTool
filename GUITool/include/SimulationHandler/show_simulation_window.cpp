@@ -164,7 +164,7 @@ void ShowSimulationInformation()
     }
 
     ImGui::SameLine(0.0f, spacing);
-    if (ImGui::ArrowButton("frame_right", ImGuiDir_Right) && !SC.auto_play && SC.frame < SC.max_frame) {
+    if (ImGui::ArrowButton("frame_right", ImGuiDir_Right) && !SC.auto_play && SC.frame < SC.max_frame - 1) {
       SC.update_frame = true;
       ++SC.frame;
     }
@@ -200,7 +200,7 @@ void ShowSimulationInformation()
 
     /*----------Auto play and Replay----------*/
     ImGui::Checkbox("Auto Play", &SC.auto_play);
-    if (SC.auto_play && SC.update_frame && SC.frame < SC.max_frame) {
+    if (SC.auto_play && SC.update_frame && SC.frame < SC.max_frame - 1) {
       SC.update_frame = true;
       ++SC.frame;
     }
@@ -208,7 +208,7 @@ void ShowSimulationInformation()
     ImGui::SameLine();
 
     ImGui::Checkbox("Replay", &SC.replay);
-    if (SC.replay && SC.update_frame && SC.frame >= SC.max_frame) {
+    if (SC.replay && SC.update_frame && SC.frame >= SC.max_frame - 1) {
       SC.update_frame = true;
       SC.frame = 0;
     }
