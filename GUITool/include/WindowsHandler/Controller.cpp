@@ -20,6 +20,7 @@ void AnimationController::transform_frame()
 {
   max_frame = 0;
 
+  // if the file has been open, it means it was going to load another file, so close it
   if (_raw_bin_open)
     _raw_bin_file.close();
   else
@@ -53,9 +54,11 @@ void AnimationController::transform_frame()
       ss << line;
       ss >> x >> y;
 
+      // buffer the first 360 line for checking if the data is rtheta data later
       if (theta_cnt < 360)
         r_buf[theta_cnt++] = static_cast<int>(x * 10);
 
+      // write the binary data
       outfile.write(reinterpret_cast<char *>(&x), sizeof(double));
       outfile.write(reinterpret_cast<char *>(&y), sizeof(double));
 
@@ -64,15 +67,20 @@ void AnimationController::transform_frame()
     }
   }
 
+  // check if the data is xy data or rtheta data, the theta difference of minibot and turtlebot was 0.5 and 1
   int theta1 = r_buf[0], theta2 = r_buf[1];
   bool rtheta_data = true;
+
+  // check the first data
   if (!(theta2 - theta1 == 5 || theta2 - theta1 == 10))
     rtheta_data = false;
 
+  // check all the remain data in the first 360 line
   for (int i = 2; i < 360; ++i) {
     theta1 = theta2;
     theta2 = r_buf[i];
 
+    // if the theta difference is not 0.5 or 1, it means the data is xy data
     if (!(theta2 - theta1 == 5 || theta2 - theta1 == 10)) {
       rtheta_data = false;
       break;
