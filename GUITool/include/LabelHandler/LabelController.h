@@ -20,7 +20,8 @@
 class LabelController : public AnimationController {
 public:
   void output_feature_data();
-  void output_label_data();
+  void output_json_label_data();
+  void output_xy_label_data();
 
   void check_clean_data();
   void check_load_data();
@@ -67,7 +68,6 @@ public:
   std::vector<std::vector<Eigen::MatrixXd>> total_frame_segment_vec;
 
 private:
-  std::string _tool_data_path;
   std::string _feature_bin_path;
   std::string _feature_num_bin_path;
   std::string _label_bin_path;

@@ -105,9 +105,9 @@ void LabelController::output_feature_data()
 }
 
 /**
- * @brief Output the label of all segments to normal txt file
+ * @brief Output the label of all segments into json file
  */
-void LabelController::output_label_data()
+void LabelController::output_json_label_data()
 {
   using json = nlohmann::json;
   using ordered_json = nlohmann::ordered_json;
@@ -170,6 +170,48 @@ void LabelController::output_label_data()
 }
 
 /**
+ * @brief Output the label of all segments to normal txt file
+ */
+void LabelController::output_xy_label_data()
+{
+  // open the file would be written
+  std::ofstream label_outfile(label_output_path, std::ios::out | std::ios::trunc);
+  if (label_outfile.fail()) {
+    std::cerr << "Cannot open file" << label_output_path << '\n';
+    std::cin.get();
+    return;
+  }
+
+  auto bk_p = _label_bin_file.tellg();    // record the pointer position.
+
+  for (int i = 0; i < max_frame; ++i) {
+    if (label_size_vec[i] != 0) {
+      const std::vector<Eigen::MatrixXd> &one_frame_segment_vec = total_frame_segment_vec[i];    // the i-th frame
+      std::vector<int> one_frame_segment_label(one_frame_segment_vec.size());
+
+      // read the label of all segment in the frame
+      _label_bin_file.seekg(label_index_vec[i], std::ios::beg);
+      _label_bin_file.read(reinterpret_cast<char *>(one_frame_segment_label.data()), label_size_vec[i]);
+
+      // iterate through all the segment in the frame
+      for (int j = 0; j < one_frame_segment_vec.size(); ++j) {
+        const Eigen::MatrixXd &segment = one_frame_segment_vec[j];    // the j-th segment in the frame
+        int segment_size = segment.rows();
+
+        // output the x and y and the corresponding label of the segment
+        for (int k = 0; k < segment_size; ++k)
+          label_outfile << segment(k, 0) << ' ' << segment(k, 1) << ' ' << one_frame_segment_label[j] << '\n';
+      }
+    }
+  }
+
+  // set the pointer to the original place
+  _label_bin_file.seekg(bk_p, std::ios::beg);
+  // clear the file flag
+  _label_bin_file.clear();
+}
+
+/**
  * @brief clean the file had been wrote, and reset the corresponding member.
  */
 void LabelController::check_clean_data()
@@ -206,7 +248,6 @@ void LabelController::check_clean_data()
     if (std::filesystem::exists(label_output_path)) std::filesystem::resize_file(label_output_path, 0);
 
     // reset member
-    clean_data = false;
     update_frame = true;
     save_label = false;
     enable_enter_save = false;
@@ -215,7 +256,6 @@ void LabelController::check_clean_data()
     show_nearest = false;
     auto_label = false;
     clean_data = false;
-    load_data = false;
 
     frame = 0;
     xy_data = Eigen::MatrixXd::Zero(HZ, 2);
@@ -233,8 +273,6 @@ void LabelController::check_load_data()
   // load data
   if (load_data) {
     load_data = false;
-    clean_data = true;
-    check_clean_data();
     transform_frame();
 
     // resize the information vector
@@ -409,14 +447,11 @@ LabelController::LabelController() : AnimationController()
   clean_data = false;
   load_data = false;
 
-  current_save_frame = -1;
-  writed_max_frame = -1;
-  writed_frame_numbers = 0;
   current_save_time = std::chrono::system_clock::now();
 
   label_mouse_area = static_cast<float>(0.05);
 
-  _tool_data_path = FileHandler::get_MRL_project_root() + "/dataset/binary_data/MesTool.dat";
+  _tool_data_path = FileHandler::get_MRL_project_root() + "/dataset/binary_data/MesToolLabelController.dat";
 
   bool set_tool_data_file = false;
   // check if the tool data file exist
@@ -454,7 +489,11 @@ LabelController::LabelController() : AnimationController()
                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/feature_bin.txt" << '\n'    // default _feature_bin_path
                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/feature_num_bin.txt" << '\n'    // default _feature_num_bin_path
                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_bin.txt" << '\n'    // default _label_bin_path
-                    << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_num_bin.txt";    // default _label_num_bin_path
+                    << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_num_bin.txt" << '\n'    // default _label_num_bin_path
+                    << 360 << '\n'    // set default HZ to 360
+                    << -1 << '\n'    // current_save_frame
+                    << -1 << '\n'    // writed_max_frame
+                    << 0;    // writed_frame_numbers
   }
 
   {
@@ -476,6 +515,20 @@ LabelController::LabelController() : AnimationController()
     std::getline(_tool_data_file, _label_num_bin_path);
     _buf_feature_path = FileHandler::get_MRL_project_root() + "/dataset/binary_data/tmp_feature_buffer_data";
     _buf_label_path = FileHandler::get_MRL_project_root() + "/dataset/binary_data/tmp_lable_buffer_data";
+
+    std::string line;
+    std::getline(_tool_data_file, line);
+    HZ = std::stoi(line);
+    xy_data = Eigen::MatrixXd::Zero(HZ, 2);
+
+    std::getline(_tool_data_file, line);
+    current_save_frame = std::stoi(line);
+
+    std::getline(_tool_data_file, line);
+    writed_max_frame = std::stoi(line);
+
+    std::getline(_tool_data_file, line);
+    writed_frame_numbers = std::stoi(line);
   }
 
   if (!std::filesystem::exists(_feature_bin_path)) std::ofstream create_file(_feature_bin_path);    // just for creating file.
@@ -550,7 +603,7 @@ LabelController::~LabelController()
   std::filesystem::remove(_buf_feature_path);
   std::filesystem::remove(_buf_label_path);
 
-  std::ofstream _tool_data_file(_tool_data_path);
+  std::ofstream _tool_data_file(_tool_data_path, std::ios::out | std::ios::trunc);
   if (_tool_data_file.fail()) {
     std::cerr << "cant open " << _tool_data_path << '\n';
     std::cin.get();
@@ -564,5 +617,9 @@ LabelController::~LabelController()
                   << _feature_bin_path << '\n'
                   << _feature_num_bin_path << '\n'
                   << _label_bin_path << '\n'
-                  << _label_num_bin_path;
+                  << _label_num_bin_path << '\n'
+                  << HZ << '\n'
+                  << current_save_frame << '\n'
+                  << writed_max_frame << '\n'
+                  << writed_frame_numbers;
 }

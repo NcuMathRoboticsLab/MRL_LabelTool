@@ -78,6 +78,7 @@ void ShowLabelInformation()
       if (ImGuiFileDialog::Instance()->IsOk()) {
         LC.auto_play = false;
         LC.replay = false;
+        LC.clean_data = true;
         LC.load_data = true;
 
         std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
@@ -134,6 +135,7 @@ void ShowLabelInformation()
 
     if (ImGui::Button("720")) {
       LC.HZ = 720;
+      LC.clean_data = true;
       LC.load_data = true;
 
       if (current_HZ != LC.HZ) {
@@ -149,6 +151,7 @@ void ShowLabelInformation()
     ImGui::SameLine();
     if (ImGui::Button("360")) {
       LC.HZ = 360;
+      LC.clean_data = true;
       LC.load_data = true;
 
       if (current_HZ != LC.HZ) {
@@ -225,7 +228,7 @@ void ShowLabelInformation()
     }
 
     ImGui::SameLine(0.0f, spacing);
-    if ((ImGui::ArrowButton("frame_right", ImGuiDir_Right) || ImGui::IsKeyPressed(ImGuiKey_RightArrow)) && !LC.auto_play && LC.frame < LC.max_frame) {
+    if ((ImGui::ArrowButton("frame_right", ImGuiDir_Right) || ImGui::IsKeyPressed(ImGuiKey_RightArrow)) && !LC.auto_play && LC.frame < LC.max_frame - 1) {
       LC.update_frame = true;
       ++LC.frame;
     }
@@ -261,7 +264,7 @@ void ShowLabelInformation()
 
     /*----------Auto play and Replay----------*/
     ImGui::Checkbox("Auto Play", &LC.auto_play);
-    if (LC.auto_play && LC.update_frame && LC.frame < LC.max_frame) {
+    if (LC.auto_play && LC.update_frame && LC.frame < LC.max_frame - 1) {
       LC.update_frame = true;
       ++LC.frame;
     }
@@ -269,7 +272,7 @@ void ShowLabelInformation()
     ImGui::SameLine();
 
     ImGui::Checkbox("Replay", &LC.replay);
-    if (LC.replay && LC.update_frame && LC.frame >= LC.max_frame) {
+    if (LC.replay && LC.update_frame && LC.frame >= LC.max_frame - 1) {
       LC.update_frame = true;
       LC.frame = 0;
     }
@@ -292,10 +295,17 @@ void ShowLabelInformation()
       ImGui::Text("Save Label data from Frame: %d", LC.current_save_frame);
     }
 
-    /*----------Output txt file Control----------*/
-    if (ImGui::Button("Output File")) {
+    /*----------Output JSON file Control----------*/
+    if (ImGui::Button("Output JSON label File")) {
       LC.output_feature_data();
-      LC.output_label_data();
+      LC.output_json_label_data();
+    }
+
+    /*----------Output JSON file Control----------*/
+    ImGui::SameLine();
+    if (ImGui::Button("Output xy label File")) {
+      LC.output_feature_data();
+      LC.output_xy_label_data();
     }
 
     /*----------Show Label Rect and Auto Label----------*/
@@ -324,8 +334,8 @@ void ShowLabel()
 
   LC.check_auto_play();
   ShowLabelInformation();
-  LC.check_load_data();
   LC.check_clean_data();
+  LC.check_load_data();
   LC.check_update_frame();
 
   // draw point
