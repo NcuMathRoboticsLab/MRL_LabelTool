@@ -64,6 +64,7 @@ public:
   std::vector<int> label_index_vec;
   std::vector<int> feature_size_vec;
   std::vector<int> feature_index_vec;
+  std::vector<std::vector<Eigen::MatrixXd>> total_frame_segment_vec;
 
 private:
   std::string _tool_data_path;

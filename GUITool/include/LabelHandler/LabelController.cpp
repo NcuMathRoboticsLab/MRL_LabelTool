@@ -12,6 +12,7 @@
 #include "LabelController.h"
 #include "make_feature.h"
 #include "file_handler.h"
+#include "json.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -31,6 +32,7 @@ void LabelController::_write_bin_feature_data(const int feature_index, const Eig
     for (const double feature : row)
       _feature_bin_file.write(reinterpret_cast<const char *>(&feature), sizeof(double));
   }
+  _feature_bin_file.flush();
 }
 
 /**
@@ -42,6 +44,7 @@ void LabelController::_write_bin_feature_num_data(const int nums)
 {
   _feature_num_bin_file.seekp(frame * sizeof(double), std::ios::beg);
   _feature_num_bin_file.write(reinterpret_cast<const char *>(&nums), sizeof(double));
+  _feature_num_bin_file.flush();
 }
 
 /**
@@ -55,6 +58,8 @@ void LabelController::_write_bin_label_data(const int label_index, const std::ve
   _label_bin_file.seekp(label_index, std::ios::beg);
   for (const int label : segment_label)
     _label_bin_file.write(reinterpret_cast<const char *>(&label), sizeof(int));
+
+  _label_bin_file.flush();
 }
 
 /**
@@ -66,6 +71,7 @@ void LabelController::_write_bin_label_num_data(const int nums)
 {
   _label_num_bin_file.seekp(frame * sizeof(int), std::ios::beg);
   _label_num_bin_file.write(reinterpret_cast<const char *>(&nums), sizeof(int));
+  _label_num_bin_file.flush();
 }
 
 /**
@@ -103,7 +109,49 @@ void LabelController::output_feature_data()
  */
 void LabelController::output_label_data()
 {
+  using json = nlohmann::json;
+  using ordered_json = nlohmann::ordered_json;
+
+  ordered_json label_data;
+  label_data["frames"] = ordered_json::array();
+
   auto bk_p = _label_bin_file.tellg();    // record the pointer position.
+
+  for (int i = 0; i < max_frame; ++i) {
+    if (label_size_vec[i] != 0) {
+      const std::vector<Eigen::MatrixXd> &one_frame_segment_vec = total_frame_segment_vec[i];    // the i-th frame
+      std::vector<int> one_frame_segment_label(one_frame_segment_vec.size());
+
+      ordered_json one_frame_json = ordered_json::object();
+      ordered_json segments_json = ordered_json::array();
+
+      // read the label of all segment in the frame
+      _label_bin_file.seekg(label_index_vec[i], std::ios::beg);
+      _label_bin_file.read(reinterpret_cast<char *>(one_frame_segment_label.data()), label_size_vec[i]);
+
+      // iterate through all the segment in the frame
+      for (int j = 0; j < one_frame_segment_vec.size(); ++j) {
+        const Eigen::MatrixXd &segment = one_frame_segment_vec[j];    // the j-th segment in the frame
+        int segment_size = segment.rows();
+
+        ordered_json points_json = ordered_json::object();
+        points_json["x"] = ordered_json::array();
+        points_json["y"] = ordered_json::array();
+
+        // output the x and y and the corresponding label of the segment
+        for (int k = 0; k < segment_size; ++k) {
+          points_json["x"].push_back(segment(k, 0));
+          points_json["y"].push_back(segment(k, 1));
+        }
+
+        segments_json.push_back(ordered_json::object({ { "segment_index", j }, { "label", one_frame_segment_label[j] }, { "points", points_json } }));
+      }
+
+      one_frame_json["frame_index"] = i;
+      one_frame_json["segments"] = segments_json;
+      label_data["frames"].push_back(one_frame_json);
+    }
+  }
 
   // open the file would be written
   std::ofstream label_outfile(label_output_path, std::ios::out | std::ios::trunc);
@@ -113,25 +161,12 @@ void LabelController::output_label_data()
     return;
   }
 
-  // reset the pointer of binary file to the beginning.
-  _label_bin_file.seekg(0, std::ios::beg);
-  int buf;    // the buffer of label
-  // read and write all label
-  while (_label_bin_file.read(reinterpret_cast<char *>(&buf), sizeof(int)))
-    label_outfile << buf << '\n';
+  label_outfile << label_data.dump(2);
 
   // set the pointer to the original place
   _label_bin_file.seekg(bk_p, std::ios::beg);
   // clear the file flag
   _label_bin_file.clear();
-}
-
-/**
- * @brief Output the xy data of all segments in all frames
- *
- */
-void LabelController::output_xy_data()
-{
 }
 
 /**
@@ -154,6 +189,7 @@ void LabelController::check_clean_data()
     std::filesystem::resize_file(_label_bin_path, 0);
     std::fill(label_size_vec.begin(), label_size_vec.end(), 0);
     std::fill(label_index_vec.begin(), label_index_vec.end(), 0);
+    std::fill(total_frame_segment_vec.begin(), total_frame_segment_vec.end(), std::vector<Eigen::MatrixXd>());
 
     // clean label number binary file
     _label_num_bin_file.seekg(0, std::ios::beg);
@@ -198,17 +234,20 @@ void LabelController::check_load_data()
   if (load_data) {
     load_data = false;
     clean_data = true;
+    check_clean_data();
     transform_frame();
 
     // resize the information vector
-    label_size_vec.resize(max_frame + 1);
+    label_size_vec.resize(max_frame);
     label_size_vec.shrink_to_fit();
-    label_index_vec.resize(max_frame + 1);
+    label_index_vec.resize(max_frame);
     label_index_vec.shrink_to_fit();
-    feature_size_vec.resize(max_frame + 1);
+    feature_size_vec.resize(max_frame);
     feature_size_vec.shrink_to_fit();
-    feature_index_vec.resize(max_frame + 1);
+    feature_index_vec.resize(max_frame);
     feature_index_vec.shrink_to_fit();
+    total_frame_segment_vec.resize(max_frame);
+    total_frame_segment_vec.shrink_to_fit();
   }
 }
 
@@ -253,13 +292,14 @@ void LabelController::check_save_data()
     save_label = false;
 
     // have bot been written
-    bool have_not_been_written = (label_size_vec[frame] == 0);
+    const bool have_not_been_written = (label_size_vec[frame] == 0);
     if (have_not_been_written)
       ++writed_frame_numbers;
 
     // set the size of the frame
     feature_size_vec[frame] = feature_matrix.size() * sizeof(double);
     label_size_vec[frame] = segment_vec.size() * sizeof(int);
+    total_frame_segment_vec[frame] = segment_vec;
 
     int feature_index = 0, label_index = 0;
     // calculate the index of this feature in the binary file
@@ -379,20 +419,26 @@ LabelController::LabelController() : AnimationController()
   _tool_data_path = FileHandler::get_MRL_project_root() + "/dataset/binary_data/MesTool.dat";
 
   bool set_tool_data_file = false;
+  // check if the tool data file exist
   if (!std::filesystem::exists(_tool_data_path) || std::filesystem::file_size(_tool_data_path) == 0)
     set_tool_data_file = true;
   else {
+    // if the file exist, check if the path in the file exist
     std::ifstream infile(_tool_data_path);
     std::string line;
     std::getline(infile, line);
 
+    // if the path in the file doesn't exist, set the tool data file
     if (!std::filesystem::exists(line))
       set_tool_data_file = true;
+
+    // if it can't open the file, set the tool data file
     if (std::ifstream test_file(line); test_file.fail())
       set_tool_data_file = true;
   }
 
   if (set_tool_data_file) {
+    // clear the file content and set the default path
     std::ofstream _tool_data_file(_tool_data_path, std::ios::out | std::ios::trunc);
     if (_tool_data_file.fail()) {
       std::cerr << "cant open " << _tool_data_path << '\n';
@@ -400,6 +446,7 @@ LabelController::LabelController() : AnimationController()
       exit(1);
     }
 
+    // write the default path to the file
     _tool_data_file << FileHandler::get_MRL_project_root() + "/dataset/raw_data/demo_train_xy.txt" << '\n'    // default raw_data_path
                     << FileHandler::get_MRL_project_root() + "/dataset/binary_data/label_using_raw_data_bin.txt" << '\n'    // default _raw_bin_path
                     << FileHandler::get_MRL_project_root() + "/dataset/default_data/default_feature_data.txt" << '\n'    // default feature_output_path
@@ -411,6 +458,7 @@ LabelController::LabelController() : AnimationController()
   }
 
   {
+    // read the path from the tool file
     std::ifstream _tool_data_file(_tool_data_path);
     if (_tool_data_file.fail()) {
       std::cerr << "cant open " << _tool_data_path << '\n';
@@ -462,25 +510,30 @@ LabelController::LabelController() : AnimationController()
     std::cin.get();
     exit(1);
   }
+
   transform_frame();
-  label_size_vec.resize(max_frame + 1);
-  label_index_vec.resize(max_frame + 1);
-  feature_size_vec.resize(max_frame + 1);
-  feature_index_vec.resize(max_frame + 1);
+  label_size_vec.resize(max_frame);
+  label_index_vec.resize(max_frame);
+  feature_size_vec.resize(max_frame);
+  feature_index_vec.resize(max_frame);
+  total_frame_segment_vec.resize(max_frame);
 
   if (std::filesystem::file_size(_label_num_bin_path) == 0) {
     const int tmp_n = 0;
     const double tmp_d = 0.0;
 
-    for (int i = 0; i < max_frame + 1; ++i) {
+    for (int i = 0; i < max_frame; ++i) {
       _label_num_bin_file.write(reinterpret_cast<const char *>(&tmp_n), sizeof(int));
       _feature_num_bin_file.write(reinterpret_cast<const char *>(&tmp_d), sizeof(double));
     }
 
+    _label_num_bin_file.flush();
+    _feature_num_bin_file.flush();
     _label_num_bin_file.seekp(0, std::ios::beg);
+    _label_num_bin_file.seekg(0, std::ios::beg);
   }
   else {
-    for (int i = 0; i < max_frame + 1; ++i) {
+    for (int i = 0; i < max_frame; ++i) {
       _label_num_bin_file.read(reinterpret_cast<char *>(&label_size_vec[i]), sizeof(int));
       _feature_num_bin_file.read(reinterpret_cast<char *>(&feature_size_vec[i]), sizeof(double));
 
