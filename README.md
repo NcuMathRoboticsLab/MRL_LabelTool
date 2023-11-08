@@ -73,3 +73,9 @@ There is a lib file `glfw3.lib` in the `3rdparty/windows/lib`, you should build 
 1. There is a `CMakeLists.txt` in the `3rdparty/windows/glad`, copy it to somewhere first, then delete the `3rdparty/windows` folder in the project.
 
 2. Download the glad correspond to your Opengl Version on the [glad loader website](https://glad.dav1d.de/). Then move the `glad` folder into `3rdparty/windows`.
+
+# Contact
+
+If you find any bugs, PR and issues are wellcome. 
+
+Or you can contact TA or Mes(mes900903@gmail.com).
